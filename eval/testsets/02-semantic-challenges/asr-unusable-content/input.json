@@ -1,0 +1,32 @@
+{
+  "participants": [
+    {
+      "id": "林",
+      "name": "林"
+    }
+  ],
+  "duration": 120,
+  "transcript": [
+    {
+      "id": "asr-1",
+      "start": 1,
+      "end": 8,
+      "speaker": "林",
+      "text": "[无法辨认]"
+    },
+    {
+      "id": "asr-2",
+      "start": 30,
+      "end": 38,
+      "speaker": "林",
+      "text": "[识别失败]"
+    },
+    {
+      "id": "asr-3",
+      "start": 60,
+      "end": 68,
+      "speaker": "林",
+      "text": "[无法辨认]"
+    }
+  ]
+}

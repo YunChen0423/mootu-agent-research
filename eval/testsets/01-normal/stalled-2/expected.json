@@ -1,0 +1,24 @@
+{
+  "id": "stalled-2",
+  "kind": "decision",
+  "description": "长时间没有内容推进，可用开放问题激活讨论。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 90,
+      "acceptableStrategies": [
+        "open_new_direction",
+        "sustain_flow"
+      ],
+      "stage": "diverge"
+    },
+    {
+      "time": 120,
+      "acceptableStrategies": [
+        "observe"
+      ],
+      "stage": "diverge"
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

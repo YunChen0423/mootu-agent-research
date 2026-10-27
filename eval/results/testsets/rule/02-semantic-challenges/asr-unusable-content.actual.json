@@ -1,0 +1,586 @@
+{
+  "id": "asr-unusable-content",
+  "description": "所有片段明确不可辨认，应该保留观察并提示缺少可靠证据，不应依据乱码启发。",
+  "passed": false,
+  "mismatches": [
+    "90s 策略期望 observe，实际 open_new_direction"
+  ],
+  "checks": [
+    {
+      "id": "asr-unusable-content",
+      "time": 90,
+      "expected": {
+        "time": 90,
+        "acceptableStrategies": [
+          "observe"
+        ],
+        "stage": "diverge"
+      },
+      "predicted": {
+        "strategy": "open_new_direction",
+        "target": null,
+        "stage": "diverge"
+      },
+      "strategyCorrect": false,
+      "stageCorrect": true,
+      "targetCorrect": null
+    }
+  ],
+  "actual": {
+    "id": "asr-unusable-content",
+    "topic": "识别质量",
+    "mode": "fallback",
+    "latencyMs": 0.04224999999999568,
+    "invariantViolations": [],
+    "result": {
+      "mode": "fallback",
+      "model": "deepseek-chat",
+      "architecture": "pi",
+      "analysis": {
+        "summary": "分析了 3 条发言、1 位参与者，生成 5 个决策检查点。",
+        "ideaClusters": [],
+        "events": [
+          {
+            "time": 0,
+            "stage": "diverge",
+            "strategy": "observe",
+            "evidence": [
+              "讨论尚未开始，Agent 暂不介入。"
+            ],
+            "metrics": {
+              "participation": 100,
+              "diversity": 38,
+              "flow": 92
+            },
+            "title": "等待讨论自然启动",
+            "reason": "讨论尚未开始，Agent 暂不介入。",
+            "followUp": "继续收集发言与想法证据",
+            "target": null,
+            "diagnostics": {
+              "speaking_seconds": {
+                "林": 0
+              },
+              "turn_counts": {
+                "林": 0
+              },
+              "participation_basis": "70% speaking duration + 30% turn count",
+              "quiet_target": "林",
+              "quiet_share": 0,
+              "quiet_seconds": 0,
+              "discussion_start_seconds": 0,
+              "discussion_elapsed_seconds": 0,
+              "current_silence_seconds": 0,
+              "idea_count": 0,
+              "recent_novelty": 0.35
+            },
+            "decisionSource": "rule_fallback",
+            "expectedEffect": "继续收集发言与想法证据",
+            "reflection": "尚无上一轮行动",
+            "confidence": null,
+            "missingEvidence": [
+              "尚无讨论内容"
+            ],
+            "candidates": [
+              {
+                "strategy": "observe",
+                "target": null,
+                "utility": null,
+                "confidence": null
+              }
+            ],
+            "selectionMargin": null,
+            "stageRecommendation": "diverge",
+            "stageVotes": 0
+          },
+          {
+            "time": 30,
+            "stage": "diverge",
+            "strategy": "observe",
+            "evidence": [
+              "近期参与状态综合发言时长与轮次，均衡度为 100/100。",
+              "近期新方向增长有限，创意发散度为 38/100。",
+              "当前连续沉默约 22 秒。"
+            ],
+            "metrics": {
+              "participation": 100,
+              "diversity": 38,
+              "flow": 0
+            },
+            "title": "等待讨论自然启动",
+            "reason": "近期参与状态综合发言时长与轮次，均衡度为 100/100。 近期新方向增长有限，创意发散度为 38/100。 当前连续沉默约 22 秒。",
+            "followUp": "继续收集发言与想法证据",
+            "target": null,
+            "diagnostics": {
+              "speaking_seconds": {
+                "林": 7
+              },
+              "turn_counts": {
+                "林": 1
+              },
+              "participation_basis": "70% speaking duration + 30% turn count",
+              "quiet_target": "林",
+              "quiet_share": 1,
+              "quiet_seconds": 22,
+              "discussion_start_seconds": 0,
+              "discussion_elapsed_seconds": 30,
+              "current_silence_seconds": 22,
+              "idea_count": 0,
+              "recent_novelty": 0.35
+            },
+            "decisionSource": "rule_fallback",
+            "expectedEffect": "继续收集发言与想法证据",
+            "reflection": "等待下一观察窗口验证",
+            "confidence": null,
+            "missingEvidence": [
+              "未接入语义模型，当前仅使用可解释规则"
+            ],
+            "candidates": [
+              {
+                "strategy": "observe",
+                "target": null,
+                "utility": null,
+                "confidence": null
+              }
+            ],
+            "selectionMargin": null,
+            "stageRecommendation": "diverge",
+            "stageVotes": 0
+          },
+          {
+            "time": 60,
+            "stage": "diverge",
+            "strategy": "observe",
+            "evidence": [
+              "近期参与状态综合发言时长与轮次，均衡度为 100/100。",
+              "近期新方向增长有限，创意发散度为 38/100。",
+              "当前连续沉默约 22 秒。"
+            ],
+            "metrics": {
+              "participation": 100,
+              "diversity": 38,
+              "flow": 0
+            },
+            "title": "等待讨论自然启动",
+            "reason": "近期参与状态综合发言时长与轮次，均衡度为 100/100。 近期新方向增长有限，创意发散度为 38/100。 当前连续沉默约 22 秒。",
+            "followUp": "继续收集发言与想法证据",
+            "target": null,
+            "diagnostics": {
+              "speaking_seconds": {
+                "林": 15
+              },
+              "turn_counts": {
+                "林": 2
+              },
+              "participation_basis": "70% speaking duration + 30% turn count",
+              "quiet_target": "林",
+              "quiet_share": 1,
+              "quiet_seconds": 22,
+              "discussion_start_seconds": 0,
+              "discussion_elapsed_seconds": 60,
+              "current_silence_seconds": 22,
+              "idea_count": 0,
+              "recent_novelty": 0.35
+            },
+            "decisionSource": "rule_fallback",
+            "expectedEffect": "继续收集发言与想法证据",
+            "reflection": "等待下一观察窗口验证",
+            "confidence": null,
+            "missingEvidence": [
+              "未接入语义模型，当前仅使用可解释规则"
+            ],
+            "candidates": [
+              {
+                "strategy": "observe",
+                "target": null,
+                "utility": null,
+                "confidence": null
+              }
+            ],
+            "selectionMargin": null,
+            "stageRecommendation": "diverge",
+            "stageVotes": 0
+          },
+          {
+            "time": 90,
+            "stage": "diverge",
+            "strategy": "open_new_direction",
+            "evidence": [
+              "近期参与状态综合发言时长与轮次，均衡度为 100/100。",
+              "近期新方向增长有限，创意发散度为 38/100。",
+              "当前连续沉默约 22 秒。"
+            ],
+            "metrics": {
+              "participation": 100,
+              "diversity": 38,
+              "flow": 0
+            },
+            "title": "激活新的探索方向",
+            "reason": "近期参与状态综合发言时长与轮次，均衡度为 100/100。 近期新方向增长有限，创意发散度为 38/100。 当前连续沉默约 22 秒。",
+            "followUp": "观察下一窗口是否出现语义上不同的新想法",
+            "target": null,
+            "diagnostics": {
+              "speaking_seconds": {
+                "林": 16
+              },
+              "turn_counts": {
+                "林": 2
+              },
+              "participation_basis": "70% speaking duration + 30% turn count",
+              "quiet_target": "林",
+              "quiet_share": 1,
+              "quiet_seconds": 22,
+              "discussion_start_seconds": 0,
+              "discussion_elapsed_seconds": 90,
+              "current_silence_seconds": 22,
+              "idea_count": 0,
+              "recent_novelty": 0.35
+            },
+            "decisionSource": "rule_fallback",
+            "expectedEffect": "观察下一窗口是否出现语义上不同的新想法",
+            "reflection": "等待下一观察窗口验证",
+            "confidence": null,
+            "missingEvidence": [
+              "未接入语义模型，当前仅使用可解释规则"
+            ],
+            "candidates": [
+              {
+                "strategy": "open_new_direction",
+                "target": null,
+                "utility": null,
+                "confidence": null
+              }
+            ],
+            "selectionMargin": null,
+            "stageRecommendation": "diverge",
+            "stageVotes": 0
+          },
+          {
+            "time": 120,
+            "stage": "diverge",
+            "strategy": "observe",
+            "evidence": [
+              "近期参与状态综合发言时长与轮次，均衡度为 100/100。",
+              "近期新方向增长有限，创意发散度为 38/100。",
+              "当前连续沉默约 52 秒。"
+            ],
+            "metrics": {
+              "participation": 100,
+              "diversity": 38,
+              "flow": 0
+            },
+            "title": "暂不追加介入",
+            "reason": "近期参与状态综合发言时长与轮次，均衡度为 100/100。 近期新方向增长有限，创意发散度为 38/100。 当前连续沉默约 52 秒。",
+            "followUp": "等待上一轮介入产生反馈",
+            "target": null,
+            "diagnostics": {
+              "speaking_seconds": {
+                "林": 8
+              },
+              "turn_counts": {
+                "林": 1
+              },
+              "participation_basis": "70% speaking duration + 30% turn count",
+              "quiet_target": "林",
+              "quiet_share": 1,
+              "quiet_seconds": 52,
+              "discussion_start_seconds": 0,
+              "discussion_elapsed_seconds": 120,
+              "current_silence_seconds": 52,
+              "idea_count": 0,
+              "recent_novelty": 0.35
+            },
+            "decisionSource": "rule_fallback",
+            "expectedEffect": "等待上一轮介入产生反馈",
+            "reflection": "等待下一观察窗口验证",
+            "confidence": null,
+            "missingEvidence": [
+              "未接入语义模型，当前仅使用可解释规则"
+            ],
+            "candidates": [
+              {
+                "strategy": "observe",
+                "target": null,
+                "utility": null,
+                "confidence": null
+              }
+            ],
+            "selectionMargin": null,
+            "stageRecommendation": "diverge",
+            "stageVotes": 0
+          }
+        ]
+      },
+      "events": [
+        {
+          "time": 0,
+          "stage": "diverge",
+          "strategy": "observe",
+          "evidence": [
+            "讨论尚未开始，Agent 暂不介入。"
+          ],
+          "metrics": {
+            "participation": 100,
+            "diversity": 38,
+            "flow": 92
+          },
+          "title": "等待讨论自然启动",
+          "reason": "讨论尚未开始，Agent 暂不介入。",
+          "followUp": "继续收集发言与想法证据",
+          "target": null,
+          "diagnostics": {
+            "speaking_seconds": {
+              "林": 0
+            },
+            "turn_counts": {
+              "林": 0
+            },
+            "participation_basis": "70% speaking duration + 30% turn count",
+            "quiet_target": "林",
+            "quiet_share": 0,
+            "quiet_seconds": 0,
+            "discussion_start_seconds": 0,
+            "discussion_elapsed_seconds": 0,
+            "current_silence_seconds": 0,
+            "idea_count": 0,
+            "recent_novelty": 0.35
+          },
+          "decisionSource": "rule_fallback",
+          "expectedEffect": "继续收集发言与想法证据",
+          "reflection": "尚无上一轮行动",
+          "confidence": null,
+          "missingEvidence": [
+            "尚无讨论内容"
+          ],
+          "candidates": [
+            {
+              "strategy": "observe",
+              "target": null,
+              "utility": null,
+              "confidence": null
+            }
+          ],
+          "selectionMargin": null,
+          "stageRecommendation": "diverge",
+          "stageVotes": 0
+        },
+        {
+          "time": 30,
+          "stage": "diverge",
+          "strategy": "observe",
+          "evidence": [
+            "近期参与状态综合发言时长与轮次，均衡度为 100/100。",
+            "近期新方向增长有限，创意发散度为 38/100。",
+            "当前连续沉默约 22 秒。"
+          ],
+          "metrics": {
+            "participation": 100,
+            "diversity": 38,
+            "flow": 0
+          },
+          "title": "等待讨论自然启动",
+          "reason": "近期参与状态综合发言时长与轮次，均衡度为 100/100。 近期新方向增长有限，创意发散度为 38/100。 当前连续沉默约 22 秒。",
+          "followUp": "继续收集发言与想法证据",
+          "target": null,
+          "diagnostics": {
+            "speaking_seconds": {
+              "林": 7
+            },
+            "turn_counts": {
+              "林": 1
+            },
+            "participation_basis": "70% speaking duration + 30% turn count",
+            "quiet_target": "林",
+            "quiet_share": 1,
+            "quiet_seconds": 22,
+            "discussion_start_seconds": 0,
+            "discussion_elapsed_seconds": 30,
+            "current_silence_seconds": 22,
+            "idea_count": 0,
+            "recent_novelty": 0.35
+          },
+          "decisionSource": "rule_fallback",
+          "expectedEffect": "继续收集发言与想法证据",
+          "reflection": "等待下一观察窗口验证",
+          "confidence": null,
+          "missingEvidence": [
+            "未接入语义模型，当前仅使用可解释规则"
+          ],
+          "candidates": [
+            {
+              "strategy": "observe",
+              "target": null,
+              "utility": null,
+              "confidence": null
+            }
+          ],
+          "selectionMargin": null,
+          "stageRecommendation": "diverge",
+          "stageVotes": 0
+        },
+        {
+          "time": 60,
+          "stage": "diverge",
+          "strategy": "observe",
+          "evidence": [
+            "近期参与状态综合发言时长与轮次，均衡度为 100/100。",
+            "近期新方向增长有限，创意发散度为 38/100。",
+            "当前连续沉默约 22 秒。"
+          ],
+          "metrics": {
+            "participation": 100,
+            "diversity": 38,
+            "flow": 0
+          },
+          "title": "等待讨论自然启动",
+          "reason": "近期参与状态综合发言时长与轮次，均衡度为 100/100。 近期新方向增长有限，创意发散度为 38/100。 当前连续沉默约 22 秒。",
+          "followUp": "继续收集发言与想法证据",
+          "target": null,
+          "diagnostics": {
+            "speaking_seconds": {
+              "林": 15
+            },
+            "turn_counts": {
+              "林": 2
+            },
+            "participation_basis": "70% speaking duration + 30% turn count",
+            "quiet_target": "林",
+            "quiet_share": 1,
+            "quiet_seconds": 22,
+            "discussion_start_seconds": 0,
+            "discussion_elapsed_seconds": 60,
+            "current_silence_seconds": 22,
+            "idea_count": 0,
+            "recent_novelty": 0.35
+          },
+          "decisionSource": "rule_fallback",
+          "expectedEffect": "继续收集发言与想法证据",
+          "reflection": "等待下一观察窗口验证",
+          "confidence": null,
+          "missingEvidence": [
+            "未接入语义模型，当前仅使用可解释规则"
+          ],
+          "candidates": [
+            {
+              "strategy": "observe",
+              "target": null,
+              "utility": null,
+              "confidence": null
+            }
+          ],
+          "selectionMargin": null,
+          "stageRecommendation": "diverge",
+          "stageVotes": 0
+        },
+        {
+          "time": 90,
+          "stage": "diverge",
+          "strategy": "open_new_direction",
+          "evidence": [
+            "近期参与状态综合发言时长与轮次，均衡度为 100/100。",
+            "近期新方向增长有限，创意发散度为 38/100。",
+            "当前连续沉默约 22 秒。"
+          ],
+          "metrics": {
+            "participation": 100,
+            "diversity": 38,
+            "flow": 0
+          },
+          "title": "激活新的探索方向",
+          "reason": "近期参与状态综合发言时长与轮次，均衡度为 100/100。 近期新方向增长有限，创意发散度为 38/100。 当前连续沉默约 22 秒。",
+          "followUp": "观察下一窗口是否出现语义上不同的新想法",
+          "target": null,
+          "diagnostics": {
+            "speaking_seconds": {
+              "林": 16
+            },
+            "turn_counts": {
+              "林": 2
+            },
+            "participation_basis": "70% speaking duration + 30% turn count",
+            "quiet_target": "林",
+            "quiet_share": 1,
+            "quiet_seconds": 22,
+            "discussion_start_seconds": 0,
+            "discussion_elapsed_seconds": 90,
+            "current_silence_seconds": 22,
+            "idea_count": 0,
+            "recent_novelty": 0.35
+          },
+          "decisionSource": "rule_fallback",
+          "expectedEffect": "观察下一窗口是否出现语义上不同的新想法",
+          "reflection": "等待下一观察窗口验证",
+          "confidence": null,
+          "missingEvidence": [
+            "未接入语义模型，当前仅使用可解释规则"
+          ],
+          "candidates": [
+            {
+              "strategy": "open_new_direction",
+              "target": null,
+              "utility": null,
+              "confidence": null
+            }
+          ],
+          "selectionMargin": null,
+          "stageRecommendation": "diverge",
+          "stageVotes": 0
+        },
+        {
+          "time": 120,
+          "stage": "diverge",
+          "strategy": "observe",
+          "evidence": [
+            "近期参与状态综合发言时长与轮次，均衡度为 100/100。",
+            "近期新方向增长有限，创意发散度为 38/100。",
+            "当前连续沉默约 52 秒。"
+          ],
+          "metrics": {
+            "participation": 100,
+            "diversity": 38,
+            "flow": 0
+          },
+          "title": "暂不追加介入",
+          "reason": "近期参与状态综合发言时长与轮次，均衡度为 100/100。 近期新方向增长有限，创意发散度为 38/100。 当前连续沉默约 52 秒。",
+          "followUp": "等待上一轮介入产生反馈",
+          "target": null,
+          "diagnostics": {
+            "speaking_seconds": {
+              "林": 8
+            },
+            "turn_counts": {
+              "林": 1
+            },
+            "participation_basis": "70% speaking duration + 30% turn count",
+            "quiet_target": "林",
+            "quiet_share": 1,
+            "quiet_seconds": 52,
+            "discussion_start_seconds": 0,
+            "discussion_elapsed_seconds": 120,
+            "current_silence_seconds": 52,
+            "idea_count": 0,
+            "recent_novelty": 0.35
+          },
+          "decisionSource": "rule_fallback",
+          "expectedEffect": "等待上一轮介入产生反馈",
+          "reflection": "等待下一观察窗口验证",
+          "confidence": null,
+          "missingEvidence": [
+            "未接入语义模型，当前仅使用可解释规则"
+          ],
+          "candidates": [
+            {
+              "strategy": "observe",
+              "target": null,
+              "utility": null,
+              "confidence": null
+            }
+          ],
+          "selectionMargin": null,
+          "stageRecommendation": "diverge",
+          "stageVotes": 0
+        }
+      ],
+      "trace": []
+    }
+  }
+}

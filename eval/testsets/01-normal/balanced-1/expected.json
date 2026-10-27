@@ -1,0 +1,23 @@
+{
+  "id": "balanced-1",
+  "kind": "decision",
+  "description": "参与均衡且有新想法，保留自主讨论。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 90,
+      "acceptableStrategies": [
+        "observe"
+      ],
+      "stage": "diverge"
+    },
+    {
+      "time": 120,
+      "acceptableStrategies": [
+        "observe"
+      ],
+      "stage": "diverge"
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

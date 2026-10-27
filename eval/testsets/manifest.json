@@ -1,0 +1,30 @@
+[
+  {
+    "id": "01-normal",
+    "title": "正常讨论与基本介入",
+    "kind": "decision",
+    "path": "01-normal/cases.jsonl",
+    "count": 6
+  },
+  {
+    "id": "02-semantic-challenges",
+    "title": "语义与自主性挑战",
+    "kind": "decision",
+    "path": "02-semantic-challenges/cases.jsonl",
+    "count": 6
+  },
+  {
+    "id": "03-voting-protocol",
+    "title": "投票与时间协议",
+    "kind": "protocol",
+    "path": "03-voting-protocol/cases.jsonl",
+    "count": 6
+  },
+  {
+    "id": "04-invalid-input",
+    "title": "非法输入与边界",
+    "kind": "invalid",
+    "path": "04-invalid-input/cases.jsonl",
+    "count": 4
+  }
+]

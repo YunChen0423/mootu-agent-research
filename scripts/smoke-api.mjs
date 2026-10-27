@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {readFile,writeFile} from 'node:fs/promises';
+const base=process.env.MOOTU_TEST_URL || 'http://127.0.0.1:4174';
+const status=await fetch(`${base}/api/status`).then(r=>r.json());
+assert.equal(status.mode,'fallback');
+const input=JSON.parse(await readFile(new URL('../eval/example-input.json',import.meta.url),'utf8'));
+const response=await fetch(`${base}/api/analyze`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(input)});
+assert.equal(response.status,200);
+const result=await response.json();
+assert.equal(result.mode,'fallback');assert.ok(result.events.some(e=>e.strategy==='invite_quiet_member'&&e.target==='吴'));
+const invalid=await fetch(`${base}/api/analyze`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({...input,transcript:[{start:5,end:1,speaker:'林',text:'bad'}]})});
+assert.equal(invalid.status,400);
+const config=await fetch(`${base}/config/actions.json`).then(r=>r.json());assert.equal(config.display.timeline_speed_multiplier,1);
+await writeFile(new URL('../eval/example-output.json',import.meta.url),JSON.stringify(result,null,2)+'\n');
+console.log('HTTP smoke: analysis, target, invalid input and real-time configuration passed');

@@ -1,0 +1,453 @@
+{
+  "metadata": {
+    "schemaVersion": "1.0",
+    "startedAt": "2026-10-27T05:50:27.787Z",
+    "mode": "rule",
+    "model": null,
+    "node": "v24.14.0",
+    "dataset": {
+      "path": "/Users/chenyun/Documents/Courses/26F HCI/mootu-agent/research-copy/eval/testsets/02-semantic-challenges/cases.jsonl",
+      "sha256": "20696118e2409ebc1ebb2bf73b6923c81fa5ef9bb43735f3b8088712a75fe408",
+      "sessions": 6,
+      "provenance": [
+        "author_synthetic"
+      ]
+    },
+    "config": {
+      "display": {
+        "timeline_speed_multiplier": 1,
+        "transcript_speed_multiplier": 1
+      },
+      "core": {
+        "channels": [
+          "move",
+          "orient",
+          "posture",
+          "voice",
+          "expression",
+          "display"
+        ],
+        "strategies": {
+          "invite_quiet_member": {
+            "label": "低压力邀请",
+            "move": "轻微朝少说者方向移动",
+            "orient": "头颈朝向少说者",
+            "posture": "前倾",
+            "voice": "邀请",
+            "expression": "鼓励",
+            "display": "{{target}}，如果你愿意，也想听听你的想法。"
+          },
+          "open_new_direction": {
+            "label": "激活新方向",
+            "move": "保持位置",
+            "orient": "环视一圈",
+            "posture": "抬头",
+            "voice": "启发",
+            "expression": "好奇",
+            "display": "我们还可以尝试一个完全不同的方向吗？"
+          },
+          "sustain_flow": {
+            "label": "维持生成",
+            "move": "保持位置",
+            "orient": "环视一圈",
+            "posture": "前倾",
+            "voice": "追问",
+            "expression": "思考",
+            "display": "这个想法还能往哪一步延伸？"
+          },
+          "prepare_convergence": {
+            "label": "建议阶段转换",
+            "move": "保持位置",
+            "orient": "环视一圈",
+            "posture": "抬头",
+            "voice": "总结",
+            "expression": "专注",
+            "display": "我们已经有几个方向了，要不要开始比较一下？"
+          },
+          "advance_decision": {
+            "label": "推进收敛",
+            "move": "保持位置",
+            "orient": "环视一圈",
+            "posture": "前倾",
+            "voice": "总结",
+            "expression": "坚定",
+            "display": "目前更倾向哪个方案？可以从价值、成本和可行性来比较。"
+          },
+          "observe": {
+            "label": "保持观察",
+            "move": "保持位置",
+            "orient": "面向小组",
+            "posture": "中立",
+            "voice": "保持安静",
+            "expression": "倾听",
+            "display": ""
+          }
+        }
+      },
+      "pod": {
+        "channels": [
+          "emotional_tone",
+          "temperature",
+          "vibration",
+          "breathing"
+        ],
+        "responses": {
+          "normal": {
+            "emotional_tone": "陪伴",
+            "temperature": "恒温",
+            "vibration": "—",
+            "breathing": "—"
+          },
+          "low_participation": {
+            "emotional_tone": "鼓励",
+            "temperature": "升温后恒温",
+            "vibration": "振 1 次",
+            "breathing": "缓慢呼吸"
+          },
+          "physiological_alert": {
+            "emotional_tone": "安抚",
+            "temperature": "升温后恒温",
+            "vibration": "—",
+            "breathing": "缓慢呼吸"
+          },
+          "contribution_complete": {
+            "emotional_tone": "奖励认可",
+            "temperature": "恒温",
+            "vibration": "振 2 次",
+            "breathing": "振 2 次"
+          }
+        }
+      },
+      "thresholds": {
+        "window_seconds": 60,
+        "quiet_member_seconds": 70,
+        "quiet_invitation_cooldown_seconds": 70,
+        "max_invitation_count": null,
+        "max_robot_utterances": null,
+        "convergence_prompt_cooldown_seconds": 135,
+        "max_convergence_prompts": null,
+        "silence_thinking_seconds": 10,
+        "silence_stalled_seconds": 18,
+        "intervention_cooldown_seconds": 35,
+        "converge_after_seconds": null,
+        "checkpoint_seconds": 30,
+        "planned_duration_seconds": null
+      }
+    },
+    "configSha256": "b4f931d076c1a864569e7ccbb1dd4c4d3e9b4dbefb4850f5d971017b01d765fd",
+    "sourceSha256": "b7288174832cab4f10fad151c485e87e4323e224ad397140906e5bc95e9a4bdd",
+    "sourceManifest": [
+      {
+        "path": "agent/memory.mjs",
+        "sha256": "906dae5bd82789f0688dfc7bdf876b062849c14c064c62dc553e07bb0b34eb39"
+      },
+      {
+        "path": "agent/pi-runtime.mjs",
+        "sha256": "5662238c6bd4eaade596d0fdfb6472ea54521ada75147b42db687ed6ce62955b"
+      },
+      {
+        "path": "agent/policy.mjs",
+        "sha256": "1ae495fdb53195d06e8a294b2c490b5091ceac495fd313b1c00585334106d35f"
+      },
+      {
+        "path": "agent/session-router.mjs",
+        "sha256": "ea642fc6e6492a27de32cb704aa4c277230f62ddc1d52e756ae813f995f0510d"
+      },
+      {
+        "path": "agent/skills.mjs",
+        "sha256": "794b1c37f3c0576612bc8e04fe5b1376c0453e65e9bbb5e6bad7aea5d677a09f"
+      },
+      {
+        "path": "agent/tools.mjs",
+        "sha256": "3ce70c2c5f3a78348c7d0d274b4e38ff1d66ba6a7e0b3ef8819dea613ef3bf6e"
+      },
+      {
+        "path": "agent/workflows.mjs",
+        "sha256": "51ab58db8ea7fb6652570a03331c340039ab3b396a33e9bc2a2cd5187320c4ae"
+      },
+      {
+        "path": "ai-agent.mjs",
+        "sha256": "a3d57c6d7e821f036ddc05f6d81b0d72cb7dfb5a35057e8ace064e7eaefa86de"
+      },
+      {
+        "path": "bridge/launch.mjs",
+        "sha256": "d8bc0ebf7cc1ad47b92c3ab5f5aaaabbf07986125f21ac584a1b31181877bc84"
+      },
+      {
+        "path": "build-worker.mjs",
+        "sha256": "643f8ad1b456868ad4da79a9bec1a3ade6f7e6696909b53db8b345d9430ed835"
+      },
+      {
+        "path": "build.mjs",
+        "sha256": "b5c9bdbe4e4e684452984f8b03fdaa51772f6778919dfab832a0e426e7b21e0f"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "149b691b45847a92647c411087a0c5868bdac88281682ceea72cc1134c93ba5d"
+      },
+      {
+        "path": "package.json",
+        "sha256": "f974470abb97e1875b198c788210169d91265ad8cac0012dec01836f2fa1784c"
+      },
+      {
+        "path": "public/agent-engine.js",
+        "sha256": "9c60a29ec0134311e6b67a624fda0db1b973eb0c355c4ff0e7c1a55f83e46528"
+      },
+      {
+        "path": "public/app.js",
+        "sha256": "1da41a8aa8898313eaf1c5fe907e83ea986b7f439bd20795dfb40f1be1916512"
+      },
+      {
+        "path": "public/browser-mujoco.js",
+        "sha256": "31ff0fafd3b5d59e91e5b3210d5a08c542587181cc5d06a16fef82b5e312c54d"
+      },
+      {
+        "path": "public/config/actions.json",
+        "sha256": "40e5f4445ca685958db5e8caf22143beb6b4e254fe8f24bbe548400d46b2bd3f"
+      },
+      {
+        "path": "public/data/sample-session.json",
+        "sha256": "2d983b56ee2e89dec89e4f231f60a5fdd4610a7e95542eeb43a9001409f68d9f"
+      },
+      {
+        "path": "public/input-contract.js",
+        "sha256": "1352e3c583a8854f4978de4958ea34ce2f7e81bda436632ba978b38a8320d761"
+      },
+      {
+        "path": "public/live-sensing.js",
+        "sha256": "d19726d74f0d6c1ceab5b9e9b87278f9bc03a68c9e4669efb9721a75777f9f49"
+      },
+      {
+        "path": "public/session-harness.js",
+        "sha256": "c91b889ca732262e3834bf1dce3cddbe95e5ef03d81025657f104afe002f0693"
+      },
+      {
+        "path": "scripts/check.mjs",
+        "sha256": "33a06b8763e606afa8820604b6390a9ec7877c6bbb6c7a73d79298bb46789242"
+      },
+      {
+        "path": "scripts/smoke-api.mjs",
+        "sha256": "40f09dbd45b19abbe14aef13a5a6a9c13e75d0a0ee2c03f4fe0e186dca732e2f"
+      },
+      {
+        "path": "server.mjs",
+        "sha256": "d884dde0f7a6d26fc18c66e00f9a7424d70c43d9593d11afda3379a59822fab0"
+      },
+      {
+        "path": "tests/research.test.mjs",
+        "sha256": "9674e149bc7f21dea4dd8abd8076c50e417550c8affc168a78c86b9da168bf86"
+      }
+    ]
+  },
+  "coverage": {
+    "sessionsCompleted": 6,
+    "sessionsFailed": 0,
+    "expectedCheckpoints": 6,
+    "scoredCheckpoints": 6
+  },
+  "metrics": {
+    "checkpoints": 6,
+    "acceptableStrategyAccuracy": 0.3333333333333333,
+    "stageAccuracy": 0.6666666666666666,
+    "targetAccuracyIncludingMissedInvitations": null,
+    "intervention": {
+      "tp": 0,
+      "fp": 3,
+      "fn": 1,
+      "tn": 0,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "falseInterventionRate": 1
+    },
+    "perStrategy": {
+      "observe": {
+        "n": 3,
+        "recall": 0
+      },
+      "advance_decision": {
+        "n": 0,
+        "recall": null
+      },
+      "prepare_convergence": {
+        "n": 0,
+        "recall": null
+      },
+      "open_new_direction": {
+        "n": 0,
+        "recall": null
+      },
+      "sustain_flow": {
+        "n": 0,
+        "recall": null
+      }
+    }
+  },
+  "alwaysObserveBaseline": {
+    "checkpoints": 6,
+    "acceptableStrategyAccuracy": 0.8333333333333334,
+    "stageAccuracy": 0.6666666666666666,
+    "targetAccuracyIncludingMissedInvitations": null,
+    "intervention": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "precision": null,
+      "recall": 0,
+      "f1": 0,
+      "falseInterventionRate": 0
+    },
+    "perStrategy": {
+      "observe": {
+        "n": 3,
+        "recall": 1
+      },
+      "advance_decision": {
+        "n": 0,
+        "recall": null
+      },
+      "prepare_convergence": {
+        "n": 0,
+        "recall": null
+      },
+      "open_new_direction": {
+        "n": 0,
+        "recall": null
+      },
+      "sustain_flow": {
+        "n": 0,
+        "recall": null
+      }
+    }
+  },
+  "invariantViolations": [],
+  "failures": [],
+  "checks": [
+    {
+      "id": "convergence-1",
+      "time": 120,
+      "expected": {
+        "time": 120,
+        "acceptableStrategies": [
+          "observe",
+          "advance_decision",
+          "prepare_convergence"
+        ],
+        "stage": "converge"
+      },
+      "predicted": {
+        "strategy": "observe",
+        "target": null,
+        "stage": "diverge"
+      },
+      "strategyCorrect": true,
+      "stageCorrect": false,
+      "targetCorrect": null
+    },
+    {
+      "id": "convergence-2",
+      "time": 120,
+      "expected": {
+        "time": 120,
+        "acceptableStrategies": [
+          "observe",
+          "advance_decision",
+          "prepare_convergence"
+        ],
+        "stage": "converge"
+      },
+      "predicted": {
+        "strategy": "observe",
+        "target": null,
+        "stage": "diverge"
+      },
+      "strategyCorrect": true,
+      "stageCorrect": false,
+      "targetCorrect": null
+    },
+    {
+      "id": "declines-invitation",
+      "time": 90,
+      "expected": {
+        "time": 90,
+        "acceptableStrategies": [
+          "observe"
+        ],
+        "stage": "diverge"
+      },
+      "predicted": {
+        "strategy": "invite_quiet_member",
+        "target": "吴",
+        "stage": "diverge"
+      },
+      "strategyCorrect": false,
+      "stageCorrect": true,
+      "targetCorrect": null
+    },
+    {
+      "id": "requested-thinking-time",
+      "time": 90,
+      "expected": {
+        "time": 90,
+        "acceptableStrategies": [
+          "observe"
+        ],
+        "stage": "diverge"
+      },
+      "predicted": {
+        "strategy": "open_new_direction",
+        "target": null,
+        "stage": "diverge"
+      },
+      "strategyCorrect": false,
+      "stageCorrect": true,
+      "targetCorrect": null
+    },
+    {
+      "id": "asr-unusable-content",
+      "time": 90,
+      "expected": {
+        "time": 90,
+        "acceptableStrategies": [
+          "observe"
+        ],
+        "stage": "diverge"
+      },
+      "predicted": {
+        "strategy": "open_new_direction",
+        "target": null,
+        "stage": "diverge"
+      },
+      "strategyCorrect": false,
+      "stageCorrect": true,
+      "targetCorrect": null
+    },
+    {
+      "id": "repeated-idea-paraphrases",
+      "time": 150,
+      "expected": {
+        "time": 150,
+        "acceptableStrategies": [
+          "open_new_direction",
+          "sustain_flow"
+        ],
+        "stage": "diverge"
+      },
+      "predicted": {
+        "strategy": "observe",
+        "target": null,
+        "stage": "diverge"
+      },
+      "strategyCorrect": false,
+      "stageCorrect": true,
+      "targetCorrect": null
+    }
+  ],
+  "limits": [
+    "Synthetic fixtures with author labels; no human validation or causal efficacy claim.",
+    "Accuracy denominators exclude failed or missing checkpoints; consult coverage and failures.",
+    "Model confidence is an uncalibrated self-report.",
+    "Whole-session latency includes all sequential model tool loops."
+  ]
+}

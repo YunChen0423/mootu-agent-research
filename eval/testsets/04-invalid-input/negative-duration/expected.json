@@ -1,0 +1,8 @@
+{
+  "id": "negative-duration",
+  "kind": "invalid",
+  "description": "发言结束早于开始，应拒绝。",
+  "provenance": "author_synthetic",
+  "expectedErrorContains": "时间",
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

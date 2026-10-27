@@ -1,0 +1,18 @@
+{
+  "id": "vote-duplicate",
+  "kind": "protocol",
+  "description": "首票有效，重复票不覆盖，也不增加总票数。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 40,
+      "expect": {
+        "voteLedger.records.length": 3,
+        "voteLedger.rejected.length": 1,
+        "voteLedger.winner.candidateId": "c2",
+        "voteLedger.winner.count": 2
+      }
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

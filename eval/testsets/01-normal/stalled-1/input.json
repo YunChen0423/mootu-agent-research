@@ -1,0 +1,18 @@
+{
+  "participants": [
+    {
+      "id": "林",
+      "name": "林",
+      "color": "#f59e0b"
+    }
+  ],
+  "duration": 120,
+  "transcript": [
+    {
+      "start": 1,
+      "end": 10,
+      "speaker": "林",
+      "text": "现在开始讨论。"
+    }
+  ]
+}

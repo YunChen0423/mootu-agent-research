@@ -1,0 +1,17 @@
+{
+  "id": "repeated-idea-paraphrases",
+  "kind": "decision",
+  "description": "多句话是同一书籍共享想法的改写；不应把字串不同当作不同方案。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 150,
+      "acceptableStrategies": [
+        "open_new_direction",
+        "sustain_flow"
+      ],
+      "stage": "diverge"
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

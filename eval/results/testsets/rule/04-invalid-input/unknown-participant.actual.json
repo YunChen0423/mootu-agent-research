@@ -1,0 +1,22 @@
+{
+  "id": "unknown-participant",
+  "description": "发言者不在显式名单，应拒绝。",
+  "passed": true,
+  "mismatches": [],
+  "checks": [
+    {
+      "expectedErrorContains": "名单以外",
+      "predicted": {
+        "accepted": false,
+        "status": 400,
+        "error": "逐字稿出现参与者名单以外的发言者"
+      },
+      "passed": true
+    }
+  ],
+  "actual": {
+    "accepted": false,
+    "status": 400,
+    "error": "逐字稿出现参与者名单以外的发言者"
+  }
+}

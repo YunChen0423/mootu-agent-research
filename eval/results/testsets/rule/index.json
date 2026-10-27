@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-10-27T05:50:27.525Z",
+  "mode": "rule",
+  "totals": [
+    {
+      "suite": "01-normal",
+      "title": "正常讨论与基本介入",
+      "kind": "decision",
+      "mode": "rule",
+      "timestamp": "2026-10-27T05:50:27.525Z",
+      "datasetSha256": "196db34fb0e40e76d6fda15405849aa32a9a3ebc6a6414f19cb8401d56bcbdb2",
+      "cases": 6,
+      "passed": 6,
+      "failed": 0,
+      "assertions": 12
+    },
+    {
+      "suite": "02-semantic-challenges",
+      "title": "语义与自主性挑战",
+      "kind": "decision",
+      "mode": "rule",
+      "timestamp": "2026-10-27T05:50:27.525Z",
+      "datasetSha256": "20696118e2409ebc1ebb2bf73b6923c81fa5ef9bb43735f3b8088712a75fe408",
+      "cases": 6,
+      "passed": 0,
+      "failed": 6,
+      "assertions": 6
+    },
+    {
+      "suite": "03-voting-protocol",
+      "title": "投票与时间协议",
+      "kind": "protocol",
+      "mode": "rule",
+      "timestamp": "2026-10-27T05:50:27.525Z",
+      "datasetSha256": "b978034c81f91885d3dd091b47bd57ed413175f2e1181672f8058b3df2401dbc",
+      "cases": 6,
+      "passed": 6,
+      "failed": 0,
+      "assertions": 26
+    },
+    {
+      "suite": "04-invalid-input",
+      "title": "非法输入与边界",
+      "kind": "invalid",
+      "mode": "rule",
+      "timestamp": "2026-10-27T05:50:27.525Z",
+      "datasetSha256": "0e0bab22140d956f00d55bc0d2938cbfcd49f277f557659acea5eb176cdf8e1d",
+      "cases": 4,
+      "passed": 4,
+      "failed": 0,
+      "assertions": 4
+    }
+  ]
+}

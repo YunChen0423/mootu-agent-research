@@ -1,7 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { build } from "esbuild";
 
-const assetNames = ["index.html", "styles.css", "enhancements.css", "app.js", "agent-engine.js", "session-harness.js", "live-sensing.js", "browser-mujoco.js", "mujoco/exact-physics-model.xml", "config/actions.json", "data/sample-session.json"];
+const assetNames = ["index.html", "styles.css", "enhancements.css", "app.js", "agent-engine.js", "session-harness.js", "input-contract.js", "live-sensing.js", "browser-mujoco.js", "mujoco/exact-physics-model.xml", "config/actions.json", "data/sample-session.json"];
 const assets = {};
 for (const name of assetNames) assets[`/${name}`] = await readFile(`public/${name}`, "utf8");
 const binaryAssets = {
@@ -68,5 +68,10 @@ await build({
   target: "es2022",
   outfile: "dist/server/index.js"
 });
-await writeFile("dist/.openai/hosting.json", await readFile(".openai/hosting.json", "utf8"));
+try {
+  await writeFile("dist/.openai/hosting.json", await readFile(".openai/hosting.json", "utf8"));
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+  console.log("No hosting identity configured; generated a local worker bundle only.");
+}
 console.log("pi-based Sites Worker bundled to dist/");

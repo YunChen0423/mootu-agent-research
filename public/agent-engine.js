@@ -73,7 +73,7 @@ function diversityAt(transcript, time, windowSeconds, discussionStart = 0) {
     const prior = ideaLines.slice(0, index);
     return 1 - Math.max(...prior.map((candidate) => similarity(line.text, candidate.text)));
   });
-  const recentNovelty = noveltyScores.slice(-Math.max(recentIdeas.length, 1));
+  const recentNovelty = recentIdeas.length ? noveltyScores.slice(-recentIdeas.length) : [];
   const novelty = recentNovelty.length ? recentNovelty.reduce((sum, value) => sum + value, 0) / recentNovelty.length : 0.35;
   const score = clamp(Math.round(28 + Math.min(ideaLines.length, 6) * 8 + novelty * 28));
   return { score, ideaCount: ideaLines.length, recentIdeaCount: recentIdeas.length, novelty };
@@ -81,7 +81,7 @@ function diversityAt(transcript, time, windowSeconds, discussionStart = 0) {
 
 function semanticAt(semantic, time) {
   if (!semantic?.windows?.length) return null;
-  return [...semantic.windows].sort((a, b) => Math.abs(a.time - time) - Math.abs(b.time - time))[0];
+  return semantic.windows.filter((window) => window.time <= time).sort((a, b) => b.time - a.time)[0] || null;
 }
 
 function compactTopic(lines) {
@@ -121,23 +121,25 @@ export function buildObservations({ transcript, participants = [], duration, con
   if (!speakers.length) throw new Error("至少需要一位参与者");
   const endTime = duration || Math.max(...sorted.map((line) => line.end));
   const thresholds = config.thresholds;
-  const interval = Math.max(35, Math.min(55, Math.round(endTime / 6)));
+  const interval = thresholds.checkpoint_seconds ?? 30;
+  if (!(interval > 0)) throw new Error("checkpoint_seconds 必须大于 0");
   const checkpoints = [0];
   for (let time = interval; time < endTime; time += interval) checkpoints.push(time);
-  if (endTime - checkpoints.at(-1) < interval / 2) checkpoints[checkpoints.length - 1] = endTime;
-  else checkpoints.push(endTime);
+  if (checkpoints.at(-1) !== endTime) checkpoints.push(endTime);
 
   return checkpoints.map((time) => {
-    const participation = participationAt(sorted, speakers, time, thresholds.window_seconds, discussionStart);
-    const flow = flowAt(sorted, time, thresholds.window_seconds, thresholds, discussionStart);
-    const diversity = diversityAt(sorted, time, thresholds.window_seconds, discussionStart);
+    const visible = sorted.filter((line) => line.end <= time);
+    const participation = participationAt(visible, speakers, time, thresholds.window_seconds, discussionStart);
+    const flow = flowAt(visible, time, thresholds.window_seconds, thresholds, discussionStart);
+    const diversity = diversityAt(visible, time, thresholds.window_seconds, discussionStart);
     const semanticWindow = semanticAt(semantic, time);
     if (semanticWindow?.idea_diversity != null) diversity.score = clamp(Math.round((diversity.score + Number(semanticWindow.idea_diversity)) / 2));
-    const stageByTime = time >= thresholds.converge_after_seconds || time / endTime >= 0.68;
+    const stageByTime = (thresholds.converge_after_seconds != null && time - discussionStart >= thresholds.converge_after_seconds)
+      || (thresholds.planned_duration_seconds > 0 && (time - discussionStart) / thresholds.planned_duration_seconds >= 0.68);
     const suggestedStage = semanticWindow?.stage_recommendation === "converge" || stageByTime ? "converge" : "diverge";
-    const recentTranscript = sorted.filter((line) => line.start <= time && line.end >= Math.max(0, time - thresholds.window_seconds)).slice(-8);
+    const recentTranscript = visible.filter((line) => line.start >= discussionStart && line.start <= time && line.end >= Math.max(0, time - thresholds.window_seconds)).slice(-8);
     return {
-      time: Math.round(time), suggestedStage,
+      time, suggestedStage,
       metrics: { participation: participation.score, diversity: diversity.score, flow: flow.score },
       evidence: time === 0 ? ["讨论尚未开始，Agent 暂不介入。"] : evidenceFor({ participation, diversity, flow, stage: suggestedStage, target: participation.quietTarget, semantic: semanticWindow }),
       recentTranscript,
@@ -149,10 +151,11 @@ export function buildObservations({ transcript, participants = [], duration, con
 function chooseDecision(context) {
   const { time, stage, previousStage, participation, diversity, flow, thresholds, lastInterventionTime } = context;
   const cooledDown = time - lastInterventionTime >= thresholds.intervention_cooldown_seconds;
+  if (!cooledDown) return { strategy: "observe", title: "暂不追加介入", followUp: "等待上一轮介入产生反馈" };
   if (stage !== previousStage) return { strategy: "prepare_convergence", title: "建议从发散转向收敛", followUp: "展示已有方向，并观察成员是否开始比较方案" };
   if (!cooledDown) return { strategy: "observe", title: "暂不追加介入", followUp: "等待上一轮介入产生反馈" };
   const quietShare = (participation.shares[participation.quietTarget] || 0) * 0.7 + (participation.turnShares[participation.quietTarget] || 0) * 0.3;
-  if (participation.score < 58 && quietShare < 0.12 && participation.silenceSince >= thresholds.quiet_member_seconds * 0.65) {
+  if (participation.score < 58 && quietShare < 0.12 && participation.silenceSince >= thresholds.quiet_member_seconds) {
     return { strategy: "invite_quiet_member", title: `低压力邀请 ${participation.quietTarget}`, followUp: `观察 ${participation.quietTarget} 是否在下一窗口开始参与`, target: participation.quietTarget };
   }
   if (stage === "diverge" && diversity.score < 55 && flow.score < 72) {
@@ -180,27 +183,21 @@ export function runAgent({ transcript, participants = [], duration, config, sema
   let robotUtteranceCount = 0;
   const events = observations.map((observation, index) => {
     const { time, suggestedStage: stage } = observation;
-    const participation = participationAt(sorted, speakers, time, thresholds.window_seconds, discussionStart);
-    const flow = flowAt(sorted, time, thresholds.window_seconds, thresholds, discussionStart);
-    const diversity = diversityAt(sorted, time, thresholds.window_seconds, discussionStart);
-    let decision = index === 0
+    const visible = sorted.filter((line) => line.end <= time);
+    const participation = participationAt(visible, speakers, time, thresholds.window_seconds, discussionStart);
+    const flow = flowAt(visible, time, thresholds.window_seconds, thresholds, discussionStart);
+    const diversity = diversityAt(visible, time, thresholds.window_seconds, discussionStart);
+    let decision = index === 0 || time - discussionStart < thresholds.quiet_member_seconds
       ? { strategy: "observe", title: "等待讨论自然启动", followUp: "继续收集发言与想法证据" }
       : chooseDecision({ time, stage, previousStage, participation, diversity, flow, thresholds, lastInterventionTime });
-    const invitationLimit = thresholds.max_invitation_count || 2;
-    const invitationCooldown = thresholds.quiet_invitation_cooldown_seconds || thresholds.intervention_cooldown_seconds;
-    const secondInvitationDue = invitationCount === 1
-      && stage === previousStage
-      && time - lastInvitationTime >= invitationCooldown
-      && observation.diagnostics.discussion_elapsed_seconds >= thresholds.quiet_member_seconds * 2;
-    if (secondInvitationDue) {
-      decision = { strategy: "invite_quiet_member", title: `第二次邀请 ${participation.quietTarget}`, followUp: "完成第二次低压力邀请后继续当前阶段", target: participation.quietTarget };
+    const invitationLimit = thresholds.max_invitation_count ?? Infinity;
+    const invitationCooldown = thresholds.quiet_invitation_cooldown_seconds ?? thresholds.intervention_cooldown_seconds;
+    if (decision.strategy === "invite_quiet_member" && (invitationCount >= invitationLimit || time - lastInvitationTime < invitationCooldown)) {
+      decision = { strategy: "observe", title: "邀请冷却或预算限制", followUp: "继续收集证据" };
     }
-    if (decision.strategy === "invite_quiet_member" && invitationCount >= invitationLimit) {
-      decision = { strategy: "observe", title: "两次邀请已完成", followUp: "继续观察，不再点名邀请" };
-    }
-    const utteranceLimit = thresholds.max_robot_utterances || 5;
+    const utteranceLimit = thresholds.max_robot_utterances ?? Infinity;
     if (decision.strategy !== "observe" && robotUtteranceCount >= utteranceLimit) {
-      decision = { strategy: "observe", title: "语音预算已用完", followUp: "改用朝向、灯光与屏幕信息反馈" };
+      decision = { strategy: "observe", title: "达到配置预算", followUp: "继续观察" };
     }
     if (decision.strategy !== "observe") {
       lastInterventionTime = time;
@@ -214,15 +211,15 @@ export function runAgent({ transcript, participants = [], duration, config, sema
       ? ["讨论尚未开始，Agent 暂不介入。"]
       : evidenceFor({ participation, diversity, flow, stage, target: decision.target, semantic: semanticAt(semantic, time) });
     const event = {
-      time: Math.round(time), stage, strategy: decision.strategy, evidence,
+      time, stage, strategy: decision.strategy, evidence,
       metrics: observation.metrics,
       title: decision.title, reason: evidence.join(" "), followUp: decision.followUp, target: decision.target || null,
       diagnostics: observation.diagnostics,
       decisionSource: "rule_fallback", expectedEffect: decision.followUp, reflection: index ? "等待下一观察窗口验证" : "尚无上一轮行动",
-      confidence: index ? 65 : 40,
+      confidence: null,
       missingEvidence: index ? ["未接入语义模型，当前仅使用可解释规则"] : ["尚无讨论内容"],
-      candidates: [{ strategy: decision.strategy, target: decision.target || null, utility: 65, confidence: index ? 65 : 40 }],
-      selectionMargin: 0,
+      candidates: [{ strategy: decision.strategy, target: decision.target || null, utility: null, confidence: null }],
+      selectionMargin: null,
       stageRecommendation: stage,
       stageVotes: 0
     };

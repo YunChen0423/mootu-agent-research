@@ -1,0 +1,16 @@
+{
+  "id": "requested-thinking-time",
+  "kind": "decision",
+  "description": "成员明确申请一段安静思考时间，仍在该时间内时不应按沉默触发追问。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 90,
+      "acceptableStrategies": [
+        "observe"
+      ],
+      "stage": "diverge"
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

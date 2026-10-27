@@ -1,0 +1,19 @@
+{
+  "id": "declared-votes-without-records",
+  "kind": "protocol",
+  "description": "机器人宣告三票不等于实际存在三张具名票。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 40,
+      "expect": {
+        "voteLedger.status": "empty",
+        "voteLedger.records.length": 0,
+        "voteLedger.winner": null,
+        "voteLedger.tallies.0.count": 0,
+        "voteLedger.tallies.1.count": 0
+      }
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

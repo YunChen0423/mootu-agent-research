@@ -1,0 +1,18 @@
+{
+  "participants": [
+    {
+      "id": "林",
+      "name": "林"
+    }
+  ],
+  "duration": 120,
+  "transcript": [
+    {
+      "id": "thinking",
+      "start": 45,
+      "end": 55,
+      "speaker": "林",
+      "text": "请给我一分钟安静思考，先不要提问，我想好了会说。"
+    }
+  ]
+}

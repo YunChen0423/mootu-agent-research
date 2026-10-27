@@ -1,0 +1,18 @@
+{
+  "id": "convergence-2",
+  "kind": "decision",
+  "description": "成员已明确开始比较取舍；应识别收敛，允许保持观察而不重复提醒。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 120,
+      "acceptableStrategies": [
+        "observe",
+        "advance_decision",
+        "prepare_convergence"
+      ],
+      "stage": "converge"
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

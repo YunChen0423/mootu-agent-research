@@ -5,7 +5,7 @@ import { generateContextualUtterance } from "./public/agent-engine.js";
 import { decideLiveWithAI, runAIAgent } from "./ai-agent.mjs";
 
 const root = join(process.cwd(), "public");
-const port = Number(process.env.PORT || 4173);
+const port = Number(process.env.PORT || 4174);
 const mime = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -102,10 +102,10 @@ const server = createServer(async (req, res) => {
     res.end(data);
   } catch (error) {
     if (error.code === "ENOENT") return json(res, 404, { error: "Not found" });
-    json(res, 500, { error: error.message });
+    json(res, error.status || 500, { error: error.message });
   }
 });
 
-server.listen(port, () => {
+server.listen(port, process.env.HOST || "127.0.0.1", () => {
   console.log(`MooTu Agent running at http://localhost:${port}`);
 });

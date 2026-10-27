@@ -20,7 +20,7 @@ const INVITATION_APPROACH_DURATION = 1.2;
 const INVITATION_HOLD_MS = 2000;
 const INVITATION_RETURN_DURATION = 1.8;
 const INVITATION_COOLDOWN_MS = 10000;
-const MAX_INVITATION_ANIMATIONS = 2;
+const MAX_INVITATION_ANIMATIONS = Infinity;
 
 const PODS = [
   [0, 0.040], [-0.046, 0.025], [-0.046, -0.025],
@@ -319,7 +319,7 @@ export async function createBrowserMujoco({ canvas, onStatus }) {
     if (!target) return false;
     const now = performance.now();
     const invitationKey = String(invitationId || speaker);
-    const approachKey = speaker;
+    const approachKey = invitationKey;
     const invitationAllowed = attentionMode === "invite"
       && !invitationInProgress()
       && now >= demo.invitationCooldownUntil
@@ -415,15 +415,10 @@ export async function createBrowserMujoco({ canvas, onStatus }) {
       demo.arrivedAt = null;
       startBaseTransition(now, { x: 0, y: 0, yaw: 0, duration: INVITATION_RETURN_DURATION, kind: "invite-return" });
     } else if (demo.mode === "voting" && demo.phase === "open") {
-      const count = Math.min(demo.activePods.length, Math.floor(elapsed / 0.75));
       demo.votes.fill(null);
-      demo.activePods.forEach((pod, index) => { demo.votes[pod] = index < count ? (demo.votePlan[index] ?? null) : null; });
-      if (elapsed >= 5.5) {
-        demo.phase = "result";
-        demo.phaseStarted = now;
-        const counts = demo.voteLabels.map((_, index) => demo.votePlan.filter((vote) => vote === index).length);
-        demo.winner = demo.voteWinner ?? (counts.length ? counts.indexOf(Math.max(...counts)) : null);
-      }
+      demo.activePods.forEach((pod, index) => { demo.votes[pod] = demo.votePlan[index] ?? null; });
+      demo.winner = demo.voteWinner;
+      if (demo.voteWinner != null) demo.phase = "result";
     }
   };
   const updateDemoVisuals = (now) => {
@@ -712,11 +707,7 @@ export async function createBrowserMujoco({ canvas, onStatus }) {
       demo.voteLabels = candidates.map((candidate) => String(candidate.label || candidate)).slice(0, 4);
       const candidateIndex = new Map(candidates.map((candidate, index) => [candidate.id, index]));
       const participantVotes = new Map(records.map((record) => [record.participantId, candidateIndex.get(record.candidateId)]));
-      demo.votePlan = [...demo.speakerPodMap.keys()].map((speaker, index) => participantVotes.get(speaker) ?? (candidates.length ? (index + 1) % candidates.length : null));
-      if (!demo.votePlan.some(Number.isInteger) && winner?.candidateId && winner.count > 0) {
-        const index = candidateIndex.get(winner.candidateId);
-        demo.votePlan = demo.votePlan.map((_, participantIndex) => participantIndex < winner.count ? index : null);
-      }
+      demo.votePlan = [...demo.speakerPodMap.keys()].map((speaker) => participantVotes.get(speaker) ?? null);
       demo.voteWinner = winner?.candidateId ? candidateIndex.get(winner.candidateId) ?? null : null;
       if (lightsReady && demo.mode === "voting" && demo.phase === "waiting") {
         demo.phase = "open";

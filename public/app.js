@@ -1,3 +1,4 @@
+import { validateSession } from "./input-contract.js";
 import { generateContextualUtterance, runAgent } from "./agent-engine.js";
 import { createLiveSensing } from "./live-sensing.js";
 import { createBrowserMujoco } from "./browser-mujoco.js";
@@ -33,7 +34,7 @@ const POD_LABEL_POSITIONS = Object.freeze([
   { x: 50, y: 78 }, { x: 72, y: 68 }, { x: 70, y: 29 }
 ]);
 const VOTE_OPTION_COLORS = Object.freeze(["#ff8c14", "#1aa6ff", "#68c95a", "#9a6bea"]);
-const MAX_ROBOT_UTTERANCES = 5;
+const MAX_ROBOT_UTTERANCES = Infinity;
 let liveSensing = null;
 
 const MEMBER_LAYOUTS = {
@@ -53,7 +54,7 @@ async function load() {
   ]);
   state.session.transcript = annotateTranscript(state.session.transcript);
   state.screenTopic = normalizeScreenTopic(String(state.session.title || "").replace(/(?:创意)?讨论$/, ""));
-  state.sessionHarness = createSessionHarness({ ...state.session, candidateIdeas: state.voteCandidates });
+  state.sessionHarness = createSessionHarness({ ...state.session, candidateSnapshots: state.voteCandidates });
   configureMujocoParticipants();
   const status = await fetch("/api/status").then((r) => r.json()).catch(() => ({ mode: "fallback" }));
   state.model = status.mode;
@@ -203,13 +204,8 @@ function renderMujocoCandidates(blackboard) {
   const isResult = blackboard.phase === SESSION_PHASES.RESULT_CONFIRMATION;
   const recordedTallies = blackboard.voteLedger?.tallies || [];
   let counts = items.map((item) => recordedTallies.find((entry) => entry.candidateId === item.id)?.count || 0);
-  if (isResult && !counts.some(Boolean) && items.length) {
-    const participantCount = blackboard.participants?.length || 5;
-    const winnerIndex = items.length > 1 ? 1 : 0;
-    counts = items.map((_, index) => index === winnerIndex ? Math.max(1, participantCount - 1) : index === 0 ? 1 : 0);
-  }
-  const winnerIndex = counts.length ? counts.indexOf(Math.max(...counts)) : -1;
-  const resultTitle = winnerIndex >= 0 && counts[winnerIndex] > 0 ? `投票结果 · ${items[winnerIndex].label}胜出` : "投票结果";
+  const winnerIndex = items.findIndex((item) => item.id === blackboard.voteLedger?.winner?.candidateId);
+  const resultTitle = winnerIndex >= 0 ? `投票结果 · ${items[winnerIndex].label}胜出` : `投票结果 · ${blackboard.voteLedger?.status === "tie" ? "平票" : "证据不足"}`;
   panel.classList.toggle("result", isResult);
   panel.innerHTML = `<small>${isResult ? resultTitle : `当前投票方案 · ${sourceLabel}`}</small><div>${items.length
     ? items.map((item, index) => `<span class="${isResult && index === winnerIndex ? "winner" : ""}"><b style="--vote-color:${VOTE_OPTION_COLORS[index]}">${String.fromCharCode(65 + index)}</b><i>${escapeHtml(item.label)}</i>${isResult ? `<em>${counts[index]} 票</em>` : ""}</span>`).join("")
@@ -286,7 +282,7 @@ function renderProtocolDecision(blackboard, fallbackEvent, eventIndex) {
   $("#robotMood").textContent = `${copy.status} · ${copy.owner}`;
   const showDisplay = [SESSION_PHASES.VOTING, SESSION_PHASES.RESULT_CONFIRMATION].includes(blackboard.phase);
   const scriptedSpeech = blackboard.currentEvent?.type === EVENT_TYPES.ROBOT_UTTERANCE
-    ? boundedRobotUtterance(`scripted:${blackboard.currentEvent.id}`, blackboard.currentEvent.text)
+    ? ""
     : "";
   applyActionOutput(action, scriptedSpeech, candidateInformation(blackboard), { showDisplay });
   $("#podTarget").textContent = blackboard.activeWorkflow ? `${copy.owner} · ${blackboard.participants.length} 个 Pod` : "群体陪伴";
@@ -438,22 +434,25 @@ function normalizeTranscript(data) {
     const speaker = String(line.speaker ?? "").trim();
     const text = String(line.text ?? "").trim();
     if (!Number.isFinite(start) || !Number.isFinite(end) || !speaker || !text) throw new Error(`第 ${index + 1} 条格式不完整`);
-    return { start, end, speaker, text, type: line.type };
+    return { ...line, start, end, speaker, text, type: line.type };
   }).sort((a, b) => a.start - b.start));
+  validateSession({ transcript: normalized });
   const speakerCount = participantSpeakers(normalized).length;
   if (speakerCount > 6) throw new Error(`检测到 ${speakerCount} 位发言人；当前 MuJoCo 场景最多支持 6 位`);
   return normalized;
 }
 
-function loadImportedTranscript(lines, fileName) {
+function loadImportedTranscript(lines, fileName, metadata = {}) {
+  validateSession({ transcript: lines, participants: metadata.participants, duration: metadata.duration });
   resetPlaybackForUpload({ resetRuntime: false });
   const palette = ["#f59e0b", "#7c6ee6", "#31a68a", "#e76f51", "#4788c7", "#b565a7"];
-  const speakers = participantSpeakers(lines);
+  const speakers = metadata.participants?.length ? metadata.participants.map((person) => person.id) : participantSpeakers(lines);
+  if (speakers.length > 6) throw new Error("当前 MuJoCo 场景最多支持 6 位参与者");
   state.session.transcript = lines;
-  state.session.participants = speakers.map((speaker, index) => ({ id: speaker, name: speaker, color: palette[index % palette.length] }));
-  state.session.duration = Math.max(...lines.map((line) => line.end)) + 5;
+  state.session.participants = speakers.map((speaker, index) => ({ id: speaker, name: metadata.participants?.find((person) => person.id === speaker)?.name || speaker, color: palette[index % palette.length] }));
+  state.session.duration = metadata.duration ?? Math.max(...lines.map((line) => line.end));
   state.voteCandidates = [];
-  state.sessionHarness = createSessionHarness({ ...state.session, candidateIdeas: state.voteCandidates });
+  state.sessionHarness = createSessionHarness({ ...state.session, candidateSnapshots: state.voteCandidates });
   state.macroPhase = null;
   state.lastTranscriptKey = null;
   state.screenTopic = "讨论主题提炼中";
@@ -508,7 +507,7 @@ function boundedRobotUtterance(key, utterance) {
   const value = String(utterance || "").trim();
   if (!value) return "";
   if (state.spokenUtteranceKeys.has(key)) return state.activeSpeechKey === key ? value : "";
-  const limit = state.config?.thresholds?.max_robot_utterances || MAX_ROBOT_UTTERANCES;
+  const limit = state.config?.thresholds?.max_robot_utterances ?? MAX_ROBOT_UTTERANCES;
   if (state.spokenUtteranceKeys.size >= limit) return "";
   state.spokenUtteranceKeys.add(key);
   state.activeSpeechKey = key;
@@ -635,7 +634,7 @@ function renderDecision(event, eventIndex, time) {
     ? event.candidates.map((candidate) => `${state.config.core.strategies[candidate.strategy]?.label || candidate.strategy} ${candidate.utility ?? "—"}`).join(" / ")
     : "单路径规则";
   renderToolTrace();
-  const hasDiscussionEvidence = state.session.transcript.some((line) => line.start <= time && line.type === EVENT_TYPES.PARTICIPANT_UTTERANCE);
+  const hasDiscussionEvidence = state.session.transcript.some((line) => line.end <= time && line.type === EVENT_TYPES.PARTICIPANT_UTTERANCE);
   if (hasDiscussionEvidence) {
     setMetric("participation", event.metrics.participation, METRIC_LABELS.participation, event.stage);
     setMetric("diversity", event.metrics.diversity, METRIC_LABELS.diversity, event.stage);
@@ -649,7 +648,7 @@ function renderDecision(event, eventIndex, time) {
   const robotLine = activeLine?.type === EVENT_TYPES.ROBOT_UTTERANCE ? activeLine : null;
   const currentLine = robotLine ? null : participantAt(time);
   const currentSpeaker = currentLine?.speaker || null;
-  const scriptedInvitedTarget = invitedParticipantFromLine(robotLine);
+  const scriptedInvitedTarget = null;
   const invitedTarget = scriptedInvitedTarget || (currentSpeaker ? null : event.target) || null;
   const invitationId = invitedTarget ? `invite:${robotLine?.id || event.time}:${invitedTarget}` : null;
   const embodimentTarget = invitedTarget || currentSpeaker;
@@ -657,7 +656,7 @@ function renderDecision(event, eventIndex, time) {
   const shouldMoveForInvitation = invitedTarget ? (state.mujocoRuntime?.shouldMoveForInvite(invitedTarget) ?? true) : false;
   $("#robot").classList.toggle("intervening", intervening);
   orientRobotTo(embodimentTarget);
-  const contextLines = state.session.transcript.filter((line) => line.start <= time && line.type === EVENT_TYPES.PARTICIPANT_UTTERANCE).slice(-6);
+  const contextLines = state.session.transcript.filter((line) => line.end <= time && line.type === EVENT_TYPES.PARTICIPANT_UTTERANCE).slice(-6);
   const utteranceKey = `replay:${event.time}:${event.strategy}:${event.target || "group"}`;
   const renderedAction = invitedTarget
     ? { ...action, move: shouldMoveForInvitation ? `轻微朝 ${invitedTarget} 方向移动一次` : "保持当前位置", orient: `头颈朝向 ${invitedTarget}`, posture: "轻微前倾", voice: "温和邀请", expression: "鼓励" }
@@ -667,8 +666,8 @@ function renderDecision(event, eventIndex, time) {
       ? { ...action, move: "保持中心", orient: `头颈朝向 ${currentSpeaker}`, posture: "轻微倾向", voice: "保持安静", expression: "倾听" }
       : action;
   $("#robotMood").textContent = `${renderedAction.expression} · ${renderedAction.posture}`;
-  const proposedUtterance = robotLine?.text || contextualUtterance({ key: utteranceKey, strategy: event.strategy, target: invitedTarget, stage: event.stage, transcript: contextLines, action: renderedAction }) || event.utterance;
-  const utterance = boundedRobotUtterance(robotLine ? `scripted:${robotLine.id}` : utteranceKey, proposedUtterance);
+  const proposedUtterance = event.utterance || contextualUtterance({ key: utteranceKey, strategy: event.strategy, target: invitedTarget, stage: event.stage, transcript: contextLines, action: renderedAction }) || event.utterance;
+  const utterance = boundedRobotUtterance(utteranceKey, proposedUtterance);
   const information = candidateInformation();
   applyActionOutput(renderedAction, utterance, information);
   dispatchMujocoCommand(event, false, utterance, { target: invitedTarget, speaker: invitedTarget ? null : currentSpeaker, transcriptStart: activeLine?.start, robotSpeaking: Boolean(robotLine && utterance), attentionMode, invitationId, action: renderedAction, information, showDisplay: false });
@@ -684,7 +683,7 @@ function renderStageCriteria(event, time) {
   const panel = $("#stageCriteria");
   panel.hidden = false;
   const progress = state.session.duration ? time / state.session.duration : 0;
-  const convergeCriteria = [["覆盖度", event.metrics.diversity >= 65], ["活性下降", event.metrics.flow < 58], ["时间到", progress >= 0.62]];
+  const convergeCriteria = [["阶段建议", event.stageRecommendation === "converge"], ["连续确认", event.stageVotes >= 2]];
   const divergeCriteria = [["覆盖不足", event.metrics.diversity < 48], ["出现新方向", event.strategy === "open_new_direction" || event.metrics.flow < 35]];
   const recommendation = event.stageRecommendation === "diverge" ? "diverge" : event.stageRecommendation === "converge" || event.strategy === "prepare_convergence" ? "converge" : event.stage;
   $("#stageSwitchDirection").textContent = "发散 ↔ 收敛";
@@ -1006,7 +1005,7 @@ $("#transcriptInput").addEventListener("change", async (event) => {
   try {
     const raw = await file.text();
     const parsed = file.name.toLowerCase().endsWith(".json") ? JSON.parse(raw) : parseTranscriptText(raw);
-    loadImportedTranscript(normalizeTranscript(parsed), file.name);
+    loadImportedTranscript(normalizeTranscript(parsed), file.name, Array.isArray(parsed) ? {} : parsed);
   } catch (error) {
     toast(`逐字稿读取失败：${error.message}`);
   } finally {
@@ -1025,8 +1024,8 @@ async function runFullAgentAnalysis({ automatic = false } = {}) {
     state.events = result.events;
     const topicCandidates = [result.analysis?.screenTopic, ...(result.analysis?.ideaClusters || []), state.screenTopic];
     state.screenTopic = topicCandidates.map(normalizeScreenTopic).find(Boolean) || "讨论主题提炼中";
-    state.voteCandidates = (result.analysis?.voteCandidates || []).map(normalizeScreenTopic).filter(Boolean).slice(0, 4);
-    state.sessionHarness = createSessionHarness({ ...state.session, candidateIdeas: state.voteCandidates });
+    state.voteCandidates = result.analysis?.candidateSnapshots || [];
+    state.sessionHarness = createSessionHarness({ ...state.session, candidateSnapshots: state.voteCandidates });
     state.agentTrace = result.trace || [];
     state.agentExecution = result.execution || null;
     renderStatic();

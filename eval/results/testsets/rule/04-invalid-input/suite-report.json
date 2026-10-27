@@ -1,0 +1,102 @@
+{
+  "suite": "04-invalid-input",
+  "title": "非法输入与边界",
+  "kind": "invalid",
+  "mode": "rule",
+  "timestamp": "2026-10-27T05:50:27.525Z",
+  "datasetSha256": "0e0bab22140d956f00d55bc0d2938cbfcd49f277f557659acea5eb176cdf8e1d",
+  "cases": 4,
+  "passed": 4,
+  "failed": 0,
+  "assertions": 4,
+  "results": [
+    {
+      "id": "negative-duration",
+      "description": "发言结束早于开始，应拒绝。",
+      "passed": true,
+      "mismatches": [],
+      "checks": [
+        {
+          "expectedErrorContains": "时间",
+          "predicted": {
+            "accepted": false,
+            "status": 400,
+            "error": "transcript[0] 时间必须为秒数，且 0 <= start < end"
+          },
+          "passed": true
+        }
+      ],
+      "actual": {
+        "accepted": false,
+        "status": 400,
+        "error": "transcript[0] 时间必须为秒数，且 0 <= start < end"
+      }
+    },
+    {
+      "id": "string-timestamp",
+      "description": "API 契约要求数值秒数，应拒绝字符串。",
+      "passed": true,
+      "mismatches": [],
+      "checks": [
+        {
+          "expectedErrorContains": "时间",
+          "predicted": {
+            "accepted": false,
+            "status": 400,
+            "error": "transcript[0] 时间必须为秒数，且 0 <= start < end"
+          },
+          "passed": true
+        }
+      ],
+      "actual": {
+        "accepted": false,
+        "status": 400,
+        "error": "transcript[0] 时间必须为秒数，且 0 <= start < end"
+      }
+    },
+    {
+      "id": "duplicate-event-id",
+      "description": "重复事件 ID 应拒绝，避免票据和证据歧义。",
+      "passed": true,
+      "mismatches": [],
+      "checks": [
+        {
+          "expectedErrorContains": "唯一",
+          "predicted": {
+            "accepted": false,
+            "status": 400,
+            "error": "事件 id 必须唯一"
+          },
+          "passed": true
+        }
+      ],
+      "actual": {
+        "accepted": false,
+        "status": 400,
+        "error": "事件 id 必须唯一"
+      }
+    },
+    {
+      "id": "unknown-participant",
+      "description": "发言者不在显式名单，应拒绝。",
+      "passed": true,
+      "mismatches": [],
+      "checks": [
+        {
+          "expectedErrorContains": "名单以外",
+          "predicted": {
+            "accepted": false,
+            "status": 400,
+            "error": "逐字稿出现参与者名单以外的发言者"
+          },
+          "passed": true
+        }
+      ],
+      "actual": {
+        "accepted": false,
+        "status": 400,
+        "error": "逐字稿出现参与者名单以外的发言者"
+      }
+    }
+  ]
+}

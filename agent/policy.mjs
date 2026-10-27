@@ -67,124 +67,60 @@ export function selectCandidate(raw, ids, config, { forceObserve = false, cooldo
   return { selected, candidates, missingEvidence, margin, reason };
 }
 
-export function sanitizeEvents(rawEvents, observations, participants, config) {
+export function sanitizeEvents(rawEvents, observations, participants, config, history = []) {
   const ids = new Set(participants.map((participant) => String(participant.id)));
-  let lastIntervention = -Infinity;
-  let lastInvitation = -Infinity;
-  let invitationCount = 0;
-  let robotUtteranceCount = 0;
-  let lastConvergencePrompt = -Infinity;
-  let convergencePromptCount = 0;
-  let stage = "diverge";
-  let convergenceVotes = 0;
-  const events = observations.map((observation, index) => {
-    const raw = rawEvents.find((item) => Math.abs(Number(item.time) - observation.time) <= 2) || rawEvents[index] || {};
-    const resetAfterIcebreaker = observation.diagnostics.discussion_start_seconds > 0;
-    const discussionWarmup = resetAfterIcebreaker && observation.diagnostics.discussion_elapsed_seconds < config.thresholds.quiet_member_seconds;
-    const recommendation = !discussionWarmup && (raw.stage_recommendation === "converge" || raw.stage === "converge" || observation.suggestedStage === "converge") ? "converge" : "diverge";
-    const priorStage = stage;
-    if (stage === "diverge" && index > 0) {
-      convergenceVotes = recommendation === "converge" ? convergenceVotes + 1 : 0;
-      if (convergenceVotes >= 2) stage = "converge";
-    }
-    const cooldown = observation.time - lastIntervention < config.thresholds.intervention_cooldown_seconds;
-    const invitationCooldown = observation.time - lastInvitation < (config.thresholds.quiet_invitation_cooldown_seconds || config.thresholds.intervention_cooldown_seconds);
-    const invitationLimit = config.thresholds.max_invitation_count || 2;
-    const convergencePromptCooldown = observation.time - lastConvergencePrompt < (config.thresholds.convergence_prompt_cooldown_seconds || 30);
-    const convergencePromptLimit = config.thresholds.max_convergence_prompts || 2;
-    const selection = selectCandidate(raw, ids, config, { forceObserve: index === 0 || discussionWarmup, cooldown });
+  const approved = [...history];
+  const events = observations.map((observation) => {
+    const raw = rawEvents.find((item) => Number(item.time) === observation.time) || {};
+    const previous = approved.at(-1);
+    const priorStage = previous?.stage || "diverge";
+    const warmup = observation.diagnostics.discussion_elapsed_seconds < config.thresholds.quiet_member_seconds;
+    const recommendation = !warmup && (raw.stage_recommendation === "converge" || observation.suggestedStage === "converge") ? "converge" : "diverge";
+    const stageVotes = recommendation === "converge" ? (previous?.stageVotes || 0) + 1 : 0;
+    const stage = priorStage === "converge" || stageVotes >= 2 ? "converge" : "diverge";
+    const interventions = approved.filter((event) => event.strategy !== "observe");
+    const invitations = interventions.filter((event) => event.strategy === "invite_quiet_member");
+    const cooldown = observation.time - (interventions.at(-1)?.time ?? -Infinity) < config.thresholds.intervention_cooldown_seconds;
+    const selection = selectCandidate(raw, ids, config, { forceObserve: observation.time === 0 || warmup, cooldown });
     let selected = selection.selected;
-    let decisionReason = discussionWarmup ? "破冰结束后重新建立讨论基线，暂不沿用破冰阶段的沉默、参与或阶段判断。" : selection.reason;
-    let forcedByHarness = false;
-    const forcedCandidate = (strategy, target, title, rationale, utterance) => normalizeCandidate({ strategy, target, title, rationale, utterance, benefit: 95, disruption: 12, goal_fit: 96, confidence: 92, follow_up: "观察下一窗口是否出现更明确的比较与更均衡的参与", expected_effect: "推动讨论按当前阶段目标继续" }, ids, config);
-    const justConverged = priorStage === "diverge" && stage === "converge";
-    const quietEvidenceReady = observation.diagnostics.discussion_elapsed_seconds >= config.thresholds.quiet_member_seconds
-      && observation.diagnostics.quiet_seconds >= config.thresholds.quiet_member_seconds
-      && observation.diagnostics.quiet_share < 0.12;
-    if (selected.strategy === "invite_quiet_member" && invitationCount >= invitationLimit) {
-      selected = defaultObserve(config);
-      decisionReason = "本场两次邀请额度已经完成，避免继续点名干扰小组自主讨论。";
-    } else if (selected.strategy === "invite_quiet_member" && invitationCooldown) {
-      selected = defaultObserve(config);
-      decisionReason = "同类邀请仍在冷却期，避免反复点名打断讨论。";
-    }
-    if (selected.strategy === "observe" && invitationCooldown && quietEvidenceReady) {
-      decisionReason = "同类邀请仍在冷却期，避免反复点名打断讨论。";
-    }
-    if (selected.strategy === "observe" && invitationCount >= invitationLimit && quietEvidenceReady) {
-      decisionReason = "本场两次邀请额度已经完成，避免继续点名干扰小组自主讨论。";
-    }
-    const contentHasConverged = stage === "converge" && (observation.diagnostics.recent_novelty <= 0.35 || observation.metrics.diversity < 60);
-    const convergencePromptAvailable = !convergencePromptCooldown && convergencePromptCount < convergencePromptLimit;
-    if (["prepare_convergence", "advance_decision"].includes(selected.strategy) && (!convergencePromptAvailable || contentHasConverged)) {
-      selected = defaultObserve(config);
-      decisionReason = contentHasConverged
-        ? "近期内容已经从增加方向转为比较、取舍与确认，判定为有效收敛，不再重复提示。"
-        : "收敛提示仍在独立冷却期或已达到本阶段次数上限，避免反复打断。";
-    }
-    if (selected.strategy === "observe" && justConverged && convergencePromptAvailable) {
-      selected = forcedCandidate("prepare_convergence", null, "提示开始收敛", "阶段已经切换到收敛，但讨论仍保持高发散，需要明确发出阶段提示。", "我们已经有几个方向了，现在开始收敛，一起比较各方案的价值、成本和可行性。");
-      decisionReason = "Harness 检测到发散→收敛切换，必须向小组明确播报阶段目标。";
-      forcedByHarness = true;
-    } else if (selected.strategy === "observe" && invitationCount < invitationLimit && !cooldown && !invitationCooldown && quietEvidenceReady) {
-      const target = observation.diagnostics.quiet_target;
-      selected = forcedCandidate("invite_quiet_member", target, `邀请 ${target} 补充意见`, `${target} 在讨论开始后的观察窗口内参与明显偏低；即使讨论持续流动，也需要给其发言入口。`);
-      decisionReason = `Harness 检测到 ${target} 在讨论开始后的持续低参与，不以全场是否有人讲话作为邀请条件。`;
-      forcedByHarness = true;
-    } else if (selected.strategy === "observe" && !cooldown && convergencePromptAvailable && stage === "converge" && !contentHasConverged && observation.metrics.diversity >= 67) {
-      selected = forcedCandidate("advance_decision", null, "提醒聚焦比较", "当前已处于收敛阶段，但新想法仍持续增加，需要把讨论拉回比较与取舍。", "现在先暂停增加新方向，请围绕现有方案比较价值、成本和可行性。");
-      decisionReason = "Harness 检测到收敛阶段仍保持高发散，主动发出聚焦提示。";
-      forcedByHarness = true;
-    }
-    const secondInvitationDue = invitationCount === 1
-      && !justConverged
-      && !invitationCooldown
-      && observation.diagnostics.discussion_elapsed_seconds >= config.thresholds.quiet_member_seconds * 2;
-    if (secondInvitationDue) {
-      const target = observation.diagnostics.quiet_target;
-      selected = forcedCandidate("invite_quiet_member", target, `第二次邀请 ${target} 补充意见`, "演示编排要求在不连续打断的前提下完成第二次低压力邀请。", `${target}，我们也想听听你对现有方向的判断。`);
-      decisionReason = "第二次邀请已通过冷却校验；该邀请作为完整动画事务优先执行，后续动作排队等待。";
-      forcedByHarness = true;
-    }
-    const utteranceLimit = config.thresholds.max_robot_utterances || 5;
-    if (selected.strategy !== "observe" && robotUtteranceCount >= utteranceLimit) {
-      selected = defaultObserve(config);
-      decisionReason = "本场机器人语音已达到五句上限，后续只通过朝向、灯光与屏幕信息反馈。";
-    }
-    if (selected.strategy !== "observe") {
-      lastIntervention = observation.time;
-      robotUtteranceCount += 1;
-    }
+    let reason = selection.reason;
     if (selected.strategy === "invite_quiet_member") {
-      lastInvitation = observation.time;
-      invitationCount += 1;
+      const quiet = observation.diagnostics;
+      const targetReady = selected.target === quiet.quiet_target && quiet.quiet_seconds >= config.thresholds.quiet_member_seconds && quiet.quiet_share < 0.12;
+      const invitingTooSoon = observation.time - (invitations.at(-1)?.time ?? -Infinity) < (config.thresholds.quiet_invitation_cooldown_seconds ?? config.thresholds.intervention_cooldown_seconds);
+      if (!targetReady || invitingTooSoon || invitations.length >= (config.thresholds.max_invitation_count ?? Infinity)) {
+        selected = defaultObserve(config); reason = "邀请缺少持续低参与证据，或仍在邀请冷却期";
+      }
     }
-    if (["prepare_convergence", "advance_decision"].includes(selected.strategy)) {
-      lastConvergencePrompt = observation.time;
-      convergencePromptCount += 1;
+    if (selected.strategy !== "observe" && interventions.length >= (config.thresholds.max_robot_utterances ?? Infinity)) {
+      selected = defaultObserve(config); reason = "达到显式配置的介入预算";
     }
-    const evidence = (Array.isArray(raw.evidence) ? raw.evidence : observation.evidence).map((item) => text(item)).filter(Boolean).slice(0, 3);
-    const utterance = selected.strategy === "observe" ? "" : text(selected.utterance, generateContextualUtterance({ strategy: selected.strategy, target: selected.target, stage, transcript: observation.recentTranscript })).slice(0, 80);
-    return {
-      time: observation.time, stage, stageRecommendation: contentHasConverged ? "converge" : recommendation, stageVotes: convergenceVotes,
+    const event = {
+      time: observation.time, stage, stageRecommendation: recommendation, stageVotes,
       strategy: selected.strategy, target: selected.target, title: selected.title,
-      reason: decisionReason.slice(0, 220), evidence: evidence.length ? evidence : observation.evidence,
-      missingEvidence: selection.missingEvidence, confidence: selected.confidence,
-      candidates: forcedByHarness ? [selected, ...selection.candidates.filter((candidate) => candidate.strategy !== selected.strategy)] : selection.candidates,
-      selectionMargin: forcedByHarness ? Math.max(8, selected.utility - (selection.candidates.find((candidate) => candidate.strategy === "observe")?.utility || 0)) : selection.margin,
-      followUp: selected.followUp, expectedEffect: selected.expectedEffect, utterance,
+      reason, evidence: observation.evidence,
+      modelEvidence: (Array.isArray(raw.evidence) ? raw.evidence : []).slice(0, 3),
+      missingEvidence: selection.missingEvidence,
+      confidence: selected.confidence, confidenceKind: "uncalibrated_model_self_report",
+      candidates: selection.candidates, selectionMargin: selection.margin,
+      followUp: selected.followUp, expectedEffect: selected.expectedEffect,
+      utterance: selected.strategy === "observe" ? "" : text(selected.utterance, generateContextualUtterance({ strategy: selected.strategy, target: selected.target, stage, transcript: observation.recentTranscript })).slice(0, 80),
       metrics: observation.metrics, diagnostics: observation.diagnostics,
       decisionSource: "deepseek+pi-harness", reflection: ""
     };
+    event.reflection = outcome(previous, event);
+    approved.push(event);
+    return event;
   });
-  events.forEach((event, index) => { event.reflection = outcome(events[index - 1], event); });
   return events;
 }
 
 export function sanitizeLiveDecision(raw, { participants, stage, transcript, memory, config }) {
   const ids = new Set(participants.map((participant) => String(participant.id)));
-  const selection = selectCandidate(raw, ids, config);
-  const selected = selection.selected;
+  const last = [...memory].reverse().find((entry) => entry.strategy && entry.strategy !== "observe");
+  const cooldown = last?.at != null && (Date.now() - Number(last.at)) / 1000 < config.thresholds.intervention_cooldown_seconds;
+  const selection = selectCandidate(raw, ids, config, { cooldown });
+  const selected = selection.selected.strategy === "invite_quiet_member" ? defaultObserve(config) : selection.selected;
   const recommended = raw.stage_recommendation === "converge" ? "converge" : "diverge";
   const priorVotes = Number(memory.at(-1)?.stageVotes || 0);
   const stageVotes = stage === "diverge" && recommended === "converge" ? priorVotes + 1 : 0;

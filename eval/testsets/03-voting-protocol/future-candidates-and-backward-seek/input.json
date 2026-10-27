@@ -1,0 +1,35 @@
+{
+  "participants": [
+    {
+      "id": "林",
+      "name": "林"
+    },
+    {
+      "id": "周",
+      "name": "周"
+    },
+    {
+      "id": "吴",
+      "name": "吴"
+    }
+  ],
+  "duration": 120,
+  "transcript": [
+    {
+      "id": "discussion",
+      "start": 0,
+      "end": 2,
+      "speaker": "林",
+      "text": "我们比较共享书架和预约工具。"
+    }
+  ],
+  "candidateSnapshots": [
+    {
+      "time": 100,
+      "labels": [
+        "共享书架",
+        "预约工具"
+      ]
+    }
+  ]
+}

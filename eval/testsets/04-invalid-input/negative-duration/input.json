@@ -1,0 +1,29 @@
+{
+  "participants": [
+    {
+      "id": "林",
+      "name": "林",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "周",
+      "name": "周",
+      "color": "#7c6ee6"
+    },
+    {
+      "id": "吴",
+      "name": "吴",
+      "color": "#31a68a"
+    }
+  ],
+  "duration": 120,
+  "transcript": [
+    {
+      "id": "bad",
+      "start": 10,
+      "end": 5,
+      "speaker": "林",
+      "text": "错误时间。"
+    }
+  ]
+}

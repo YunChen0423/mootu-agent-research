@@ -160,7 +160,7 @@ export function createBatchToolset({ observations, participants, memory = [], co
       execute: async (_id, params) => {
         const missing = REQUIRED_READS.filter((name) => !state.reads.has(name));
         if (missing.length) return errorResult(`评估前缺少工具读取：${missing.join(", ")}`, "perception_tools_required");
-        const events = sanitizeEvents(params.events, observations, participants, config);
+        const events = sanitizeEvents(params.events, observations, participants, config, memory);
         const screenTopic = [params.screen_topic, ...(params.idea_clusters || [])]
           .map((value) => String(value || "").replace(/[。！？；;，,].*$/, "").replace(/^(?:讨论|关于|主题)[：:\s]*/, "").trim())
           .find((value) => value.length >= 3 && value.length <= 8 && !/[吗呢么？?]$/.test(value)) || "";

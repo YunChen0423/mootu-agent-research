@@ -1,0 +1,1175 @@
+{
+  "suite": "03-voting-protocol",
+  "title": "投票与时间协议",
+  "kind": "protocol",
+  "mode": "rule",
+  "timestamp": "2026-10-27T05:50:27.525Z",
+  "datasetSha256": "b978034c81f91885d3dd091b47bd57ed413175f2e1181672f8058b3df2401dbc",
+  "cases": 6,
+  "passed": 6,
+  "failed": 0,
+  "assertions": 26,
+  "results": [
+    {
+      "id": "vote-complete",
+      "description": "全员具名投票结束后，确认真实多数。",
+      "passed": true,
+      "mismatches": [],
+      "checks": [
+        {
+          "time": 20,
+          "key": "phase",
+          "expected": "voting",
+          "predicted": "voting",
+          "passed": true
+        },
+        {
+          "time": 20,
+          "key": "voteLedger.status",
+          "expected": "collecting",
+          "predicted": "collecting",
+          "passed": true
+        },
+        {
+          "time": 20,
+          "key": "voteLedger.winner",
+          "expected": null,
+          "predicted": null,
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "phase",
+          "expected": "result_confirmation",
+          "predicted": "result_confirmation",
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.status",
+          "expected": "complete",
+          "predicted": "complete",
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.winner.candidateId",
+          "expected": "c2",
+          "predicted": "c2",
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.winner.count",
+          "expected": 2,
+          "predicted": 2,
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.records.length",
+          "expected": 3,
+          "predicted": 3,
+          "passed": true
+        }
+      ],
+      "actual": [
+        {
+          "time": 20,
+          "blackboard": {
+            "sessionTime": 20,
+            "phase": "voting",
+            "discussionStage": null,
+            "activeAgent": "router",
+            "activeWorkflow": "voting",
+            "coactiveAgents": [
+              "router"
+            ],
+            "participants": [
+              {
+                "id": "林",
+                "name": "林"
+              },
+              {
+                "id": "周",
+                "name": "周"
+              },
+              {
+                "id": "吴",
+                "name": "吴"
+              }
+            ],
+            "podMap": [
+              {
+                "participantId": "林",
+                "podId": "pod-1"
+              },
+              {
+                "participantId": "周",
+                "podId": "pod-2"
+              },
+              {
+                "participantId": "吴",
+                "podId": "pod-3"
+              }
+            ],
+            "currentEvent": {
+              "id": "vote-2",
+              "start": 14,
+              "end": 15,
+              "speaker": "设备",
+              "text": "收到一条设备投票。",
+              "data": {
+                "vote": {
+                  "participantId": "吴",
+                  "candidateId": "c2"
+                }
+              },
+              "type": "device_event"
+            },
+            "ballotLightsReady": true,
+            "candidates": {
+              "version": "open",
+              "status": "ready",
+              "sourceEventId": "open",
+              "items": [
+                {
+                  "id": "c1",
+                  "label": "共享书架",
+                  "sourceEventId": "open"
+                },
+                {
+                  "id": "c2",
+                  "label": "预约工具",
+                  "sourceEventId": "open"
+                }
+              ]
+            },
+            "voteLedger": {
+              "status": "collecting",
+              "records": [
+                {
+                  "participantId": "林",
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "eventId": "vote-0"
+                },
+                {
+                  "participantId": "周",
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "eventId": "vote-1"
+                },
+                {
+                  "participantId": "吴",
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "eventId": "vote-2"
+                }
+              ],
+              "tallies": [
+                {
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "count": 1
+                },
+                {
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "count": 2
+                }
+              ],
+              "winner": null,
+              "missingParticipants": [],
+              "rejected": [],
+              "sourceEvents": [
+                {
+                  "eventId": "vote-0"
+                },
+                {
+                  "eventId": "vote-1"
+                },
+                {
+                  "eventId": "vote-2"
+                }
+              ]
+            },
+            "transitionHistory": []
+          }
+        },
+        {
+          "time": 40,
+          "blackboard": {
+            "sessionTime": 40,
+            "phase": "result_confirmation",
+            "discussionStage": null,
+            "activeAgent": "router",
+            "activeWorkflow": "voting",
+            "coactiveAgents": [
+              "router"
+            ],
+            "participants": [
+              {
+                "id": "林",
+                "name": "林"
+              },
+              {
+                "id": "周",
+                "name": "周"
+              },
+              {
+                "id": "吴",
+                "name": "吴"
+              }
+            ],
+            "podMap": [
+              {
+                "participantId": "林",
+                "podId": "pod-1"
+              },
+              {
+                "participantId": "周",
+                "podId": "pod-2"
+              },
+              {
+                "participantId": "吴",
+                "podId": "pod-3"
+              }
+            ],
+            "currentEvent": {
+              "id": "close",
+              "start": 30,
+              "end": 31,
+              "speaker": "Core",
+              "text": "投票结束。",
+              "data": {
+                "phase": "result_confirmation"
+              },
+              "type": "robot_utterance"
+            },
+            "ballotLightsReady": false,
+            "candidates": {
+              "version": "open",
+              "status": "ready",
+              "sourceEventId": "open",
+              "items": [
+                {
+                  "id": "c1",
+                  "label": "共享书架",
+                  "sourceEventId": "open"
+                },
+                {
+                  "id": "c2",
+                  "label": "预约工具",
+                  "sourceEventId": "open"
+                }
+              ]
+            },
+            "voteLedger": {
+              "status": "complete",
+              "records": [
+                {
+                  "participantId": "林",
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "eventId": "vote-0"
+                },
+                {
+                  "participantId": "周",
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "eventId": "vote-1"
+                },
+                {
+                  "participantId": "吴",
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "eventId": "vote-2"
+                }
+              ],
+              "tallies": [
+                {
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "count": 1
+                },
+                {
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "count": 2
+                }
+              ],
+              "winner": {
+                "candidateId": "c2",
+                "label": "预约工具",
+                "count": 2
+              },
+              "missingParticipants": [],
+              "rejected": [],
+              "sourceEvents": [
+                {
+                  "eventId": "vote-0"
+                },
+                {
+                  "eventId": "vote-1"
+                },
+                {
+                  "eventId": "vote-2"
+                }
+              ]
+            },
+            "transitionHistory": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "vote-missing",
+      "description": "缺一位成员时不得宣布赢家。",
+      "passed": true,
+      "mismatches": [],
+      "checks": [
+        {
+          "time": 40,
+          "key": "voteLedger.status",
+          "expected": "incomplete",
+          "predicted": "incomplete",
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.winner",
+          "expected": null,
+          "predicted": null,
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.records.length",
+          "expected": 2,
+          "predicted": 2,
+          "passed": true
+        }
+      ],
+      "actual": [
+        {
+          "time": 40,
+          "blackboard": {
+            "sessionTime": 40,
+            "phase": "result_confirmation",
+            "discussionStage": null,
+            "activeAgent": "router",
+            "activeWorkflow": "voting",
+            "coactiveAgents": [
+              "router"
+            ],
+            "participants": [
+              {
+                "id": "林",
+                "name": "林"
+              },
+              {
+                "id": "周",
+                "name": "周"
+              },
+              {
+                "id": "吴",
+                "name": "吴"
+              }
+            ],
+            "podMap": [
+              {
+                "participantId": "林",
+                "podId": "pod-1"
+              },
+              {
+                "participantId": "周",
+                "podId": "pod-2"
+              },
+              {
+                "participantId": "吴",
+                "podId": "pod-3"
+              }
+            ],
+            "currentEvent": {
+              "id": "close",
+              "start": 30,
+              "end": 31,
+              "speaker": "Core",
+              "text": "投票结束。",
+              "data": {
+                "phase": "result_confirmation"
+              },
+              "type": "robot_utterance"
+            },
+            "ballotLightsReady": false,
+            "candidates": {
+              "version": "open",
+              "status": "ready",
+              "sourceEventId": "open",
+              "items": [
+                {
+                  "id": "c1",
+                  "label": "共享书架",
+                  "sourceEventId": "open"
+                },
+                {
+                  "id": "c2",
+                  "label": "预约工具",
+                  "sourceEventId": "open"
+                }
+              ]
+            },
+            "voteLedger": {
+              "status": "incomplete",
+              "records": [
+                {
+                  "participantId": "林",
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "eventId": "vote-0"
+                },
+                {
+                  "participantId": "周",
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "eventId": "vote-1"
+                }
+              ],
+              "tallies": [
+                {
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "count": 1
+                },
+                {
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "count": 1
+                }
+              ],
+              "winner": null,
+              "missingParticipants": [
+                "吴"
+              ],
+              "rejected": [],
+              "sourceEvents": [
+                {
+                  "eventId": "vote-0"
+                },
+                {
+                  "eventId": "vote-1"
+                }
+              ]
+            },
+            "transitionHistory": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "vote-tie",
+      "description": "票数相同时回到候选整理，不能默认第一项获胜。",
+      "passed": true,
+      "mismatches": [],
+      "checks": [
+        {
+          "time": 40,
+          "key": "phase",
+          "expected": "ballot_preparation",
+          "predicted": "ballot_preparation",
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.status",
+          "expected": "tie",
+          "predicted": "tie",
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.winner",
+          "expected": null,
+          "predicted": null,
+          "passed": true
+        }
+      ],
+      "actual": [
+        {
+          "time": 40,
+          "blackboard": {
+            "sessionTime": 40,
+            "phase": "ballot_preparation",
+            "discussionStage": "converge",
+            "activeAgent": "discussion_facilitator",
+            "activeWorkflow": null,
+            "coactiveAgents": [
+              "discussion_facilitator",
+              "candidate_synthesis"
+            ],
+            "participants": [
+              {
+                "id": "林",
+                "name": "林"
+              },
+              {
+                "id": "周",
+                "name": "周"
+              }
+            ],
+            "podMap": [
+              {
+                "participantId": "林",
+                "podId": "pod-1"
+              },
+              {
+                "participantId": "周",
+                "podId": "pod-2"
+              }
+            ],
+            "currentEvent": {
+              "id": "close",
+              "start": 30,
+              "end": 31,
+              "speaker": "Core",
+              "text": "投票结束。",
+              "data": {
+                "phase": "result_confirmation"
+              },
+              "type": "robot_utterance"
+            },
+            "ballotLightsReady": false,
+            "candidates": {
+              "version": "open",
+              "status": "ready",
+              "sourceEventId": "open",
+              "items": [
+                {
+                  "id": "c1",
+                  "label": "共享书架",
+                  "sourceEventId": "open"
+                },
+                {
+                  "id": "c2",
+                  "label": "预约工具",
+                  "sourceEventId": "open"
+                }
+              ]
+            },
+            "voteLedger": {
+              "status": "tie",
+              "records": [
+                {
+                  "participantId": "林",
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "eventId": "vote-0"
+                },
+                {
+                  "participantId": "周",
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "eventId": "vote-1"
+                }
+              ],
+              "tallies": [
+                {
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "count": 1
+                },
+                {
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "count": 1
+                }
+              ],
+              "winner": null,
+              "missingParticipants": [],
+              "rejected": [],
+              "sourceEvents": [
+                {
+                  "eventId": "vote-0"
+                },
+                {
+                  "eventId": "vote-1"
+                }
+              ]
+            },
+            "transitionHistory": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "vote-duplicate",
+      "description": "首票有效，重复票不覆盖，也不增加总票数。",
+      "passed": true,
+      "mismatches": [],
+      "checks": [
+        {
+          "time": 40,
+          "key": "voteLedger.records.length",
+          "expected": 3,
+          "predicted": 3,
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.rejected.length",
+          "expected": 1,
+          "predicted": 1,
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.winner.candidateId",
+          "expected": "c2",
+          "predicted": "c2",
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.winner.count",
+          "expected": 2,
+          "predicted": 2,
+          "passed": true
+        }
+      ],
+      "actual": [
+        {
+          "time": 40,
+          "blackboard": {
+            "sessionTime": 40,
+            "phase": "result_confirmation",
+            "discussionStage": null,
+            "activeAgent": "router",
+            "activeWorkflow": "voting",
+            "coactiveAgents": [
+              "router"
+            ],
+            "participants": [
+              {
+                "id": "林",
+                "name": "林"
+              },
+              {
+                "id": "周",
+                "name": "周"
+              },
+              {
+                "id": "吴",
+                "name": "吴"
+              }
+            ],
+            "podMap": [
+              {
+                "participantId": "林",
+                "podId": "pod-1"
+              },
+              {
+                "participantId": "周",
+                "podId": "pod-2"
+              },
+              {
+                "participantId": "吴",
+                "podId": "pod-3"
+              }
+            ],
+            "currentEvent": {
+              "id": "close",
+              "start": 30,
+              "end": 31,
+              "speaker": "Core",
+              "text": "投票结束。",
+              "data": {
+                "phase": "result_confirmation"
+              },
+              "type": "robot_utterance"
+            },
+            "ballotLightsReady": false,
+            "candidates": {
+              "version": "open",
+              "status": "ready",
+              "sourceEventId": "open",
+              "items": [
+                {
+                  "id": "c1",
+                  "label": "共享书架",
+                  "sourceEventId": "open"
+                },
+                {
+                  "id": "c2",
+                  "label": "预约工具",
+                  "sourceEventId": "open"
+                }
+              ]
+            },
+            "voteLedger": {
+              "status": "complete",
+              "records": [
+                {
+                  "participantId": "林",
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "eventId": "vote-0"
+                },
+                {
+                  "participantId": "周",
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "eventId": "vote-1"
+                },
+                {
+                  "participantId": "吴",
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "eventId": "vote-2"
+                }
+              ],
+              "tallies": [
+                {
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "count": 1
+                },
+                {
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "count": 2
+                }
+              ],
+              "winner": {
+                "candidateId": "c2",
+                "label": "预约工具",
+                "count": 2
+              },
+              "missingParticipants": [],
+              "rejected": [
+                {
+                  "eventId": "vote-3",
+                  "reason": "duplicate_vote"
+                }
+              ],
+              "sourceEvents": [
+                {
+                  "eventId": "vote-0"
+                },
+                {
+                  "eventId": "vote-1"
+                },
+                {
+                  "eventId": "vote-2"
+                }
+              ]
+            },
+            "transitionHistory": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "declared-votes-without-records",
+      "description": "机器人宣告三票不等于实际存在三张具名票。",
+      "passed": true,
+      "mismatches": [],
+      "checks": [
+        {
+          "time": 40,
+          "key": "voteLedger.status",
+          "expected": "empty",
+          "predicted": "empty",
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.records.length",
+          "expected": 0,
+          "predicted": 0,
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.winner",
+          "expected": null,
+          "predicted": null,
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.tallies.0.count",
+          "expected": 0,
+          "predicted": 0,
+          "passed": true
+        },
+        {
+          "time": 40,
+          "key": "voteLedger.tallies.1.count",
+          "expected": 0,
+          "predicted": 0,
+          "passed": true
+        }
+      ],
+      "actual": [
+        {
+          "time": 40,
+          "blackboard": {
+            "sessionTime": 40,
+            "phase": "result_confirmation",
+            "discussionStage": null,
+            "activeAgent": "router",
+            "activeWorkflow": "voting",
+            "coactiveAgents": [
+              "router"
+            ],
+            "participants": [
+              {
+                "id": "林",
+                "name": "林"
+              },
+              {
+                "id": "周",
+                "name": "周"
+              },
+              {
+                "id": "吴",
+                "name": "吴"
+              }
+            ],
+            "podMap": [
+              {
+                "participantId": "林",
+                "podId": "pod-1"
+              },
+              {
+                "participantId": "周",
+                "podId": "pod-2"
+              },
+              {
+                "participantId": "吴",
+                "podId": "pod-3"
+              }
+            ],
+            "currentEvent": {
+              "id": "declare",
+              "start": 30,
+              "end": 31,
+              "speaker": "Core",
+              "text": "投票结束，三票支持预约工具。",
+              "type": "robot_utterance"
+            },
+            "ballotLightsReady": false,
+            "candidates": {
+              "version": "open",
+              "status": "ready",
+              "sourceEventId": "open",
+              "items": [
+                {
+                  "id": "c1",
+                  "label": "共享书架",
+                  "sourceEventId": "open"
+                },
+                {
+                  "id": "c2",
+                  "label": "预约工具",
+                  "sourceEventId": "open"
+                }
+              ]
+            },
+            "voteLedger": {
+              "status": "empty",
+              "records": [],
+              "tallies": [
+                {
+                  "candidateId": "c1",
+                  "label": "共享书架",
+                  "count": 0
+                },
+                {
+                  "candidateId": "c2",
+                  "label": "预约工具",
+                  "count": 0
+                }
+              ],
+              "winner": null,
+              "missingParticipants": [
+                "林",
+                "周",
+                "吴"
+              ],
+              "rejected": [],
+              "sourceEvents": []
+            },
+            "transitionHistory": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "future-candidates-and-backward-seek",
+      "description": "往前/往后拖动不能把未来候选带回早期时刻。",
+      "passed": true,
+      "mismatches": [],
+      "checks": [
+        {
+          "time": 50,
+          "key": "candidates.items.length",
+          "expected": 0,
+          "predicted": 0,
+          "passed": true
+        },
+        {
+          "time": 110,
+          "key": "candidates.items.length",
+          "expected": 2,
+          "predicted": 2,
+          "passed": true
+        },
+        {
+          "time": 50,
+          "key": "candidates.items.length",
+          "expected": 0,
+          "predicted": 0,
+          "passed": true
+        }
+      ],
+      "actual": [
+        {
+          "time": 50,
+          "blackboard": {
+            "sessionTime": 50,
+            "phase": "discussion",
+            "discussionStage": "diverge",
+            "activeAgent": "discussion_facilitator",
+            "activeWorkflow": null,
+            "coactiveAgents": [
+              "discussion_facilitator",
+              "candidate_synthesis"
+            ],
+            "participants": [
+              {
+                "id": "林",
+                "name": "林"
+              },
+              {
+                "id": "周",
+                "name": "周"
+              },
+              {
+                "id": "吴",
+                "name": "吴"
+              }
+            ],
+            "podMap": [
+              {
+                "participantId": "林",
+                "podId": "pod-1"
+              },
+              {
+                "participantId": "周",
+                "podId": "pod-2"
+              },
+              {
+                "participantId": "吴",
+                "podId": "pod-3"
+              }
+            ],
+            "currentEvent": {
+              "id": "discussion",
+              "start": 0,
+              "end": 2,
+              "speaker": "林",
+              "text": "我们比较共享书架和预约工具。",
+              "type": "participant_utterance"
+            },
+            "ballotLightsReady": false,
+            "candidates": {
+              "version": 0,
+              "status": "empty",
+              "items": []
+            },
+            "voteLedger": {
+              "status": "empty",
+              "records": [],
+              "tallies": [],
+              "winner": null,
+              "missingParticipants": [
+                "林",
+                "周",
+                "吴"
+              ],
+              "rejected": [],
+              "sourceEvents": []
+            },
+            "transitionHistory": []
+          }
+        },
+        {
+          "time": 110,
+          "blackboard": {
+            "sessionTime": 110,
+            "phase": "discussion",
+            "discussionStage": "diverge",
+            "activeAgent": "discussion_facilitator",
+            "activeWorkflow": null,
+            "coactiveAgents": [
+              "discussion_facilitator",
+              "candidate_synthesis"
+            ],
+            "participants": [
+              {
+                "id": "林",
+                "name": "林"
+              },
+              {
+                "id": "周",
+                "name": "周"
+              },
+              {
+                "id": "吴",
+                "name": "吴"
+              }
+            ],
+            "podMap": [
+              {
+                "participantId": "林",
+                "podId": "pod-1"
+              },
+              {
+                "participantId": "周",
+                "podId": "pod-2"
+              },
+              {
+                "participantId": "吴",
+                "podId": "pod-3"
+              }
+            ],
+            "currentEvent": {
+              "id": "discussion",
+              "start": 0,
+              "end": 2,
+              "speaker": "林",
+              "text": "我们比较共享书架和预约工具。",
+              "type": "participant_utterance"
+            },
+            "ballotLightsReady": false,
+            "candidates": {
+              "version": 100,
+              "status": "ai_synthesized",
+              "items": [
+                {
+                  "id": "ai-option-1",
+                  "label": "共享书架",
+                  "source": "deepseek",
+                  "availableAt": 100
+                },
+                {
+                  "id": "ai-option-2",
+                  "label": "预约工具",
+                  "source": "deepseek",
+                  "availableAt": 100
+                }
+              ]
+            },
+            "voteLedger": {
+              "status": "empty",
+              "records": [],
+              "tallies": [
+                {
+                  "candidateId": "ai-option-1",
+                  "label": "共享书架",
+                  "count": 0
+                },
+                {
+                  "candidateId": "ai-option-2",
+                  "label": "预约工具",
+                  "count": 0
+                }
+              ],
+              "winner": null,
+              "missingParticipants": [
+                "林",
+                "周",
+                "吴"
+              ],
+              "rejected": [],
+              "sourceEvents": []
+            },
+            "transitionHistory": []
+          }
+        },
+        {
+          "time": 50,
+          "blackboard": {
+            "sessionTime": 50,
+            "phase": "discussion",
+            "discussionStage": "diverge",
+            "activeAgent": "discussion_facilitator",
+            "activeWorkflow": null,
+            "coactiveAgents": [
+              "discussion_facilitator",
+              "candidate_synthesis"
+            ],
+            "participants": [
+              {
+                "id": "林",
+                "name": "林"
+              },
+              {
+                "id": "周",
+                "name": "周"
+              },
+              {
+                "id": "吴",
+                "name": "吴"
+              }
+            ],
+            "podMap": [
+              {
+                "participantId": "林",
+                "podId": "pod-1"
+              },
+              {
+                "participantId": "周",
+                "podId": "pod-2"
+              },
+              {
+                "participantId": "吴",
+                "podId": "pod-3"
+              }
+            ],
+            "currentEvent": {
+              "id": "discussion",
+              "start": 0,
+              "end": 2,
+              "speaker": "林",
+              "text": "我们比较共享书架和预约工具。",
+              "type": "participant_utterance"
+            },
+            "ballotLightsReady": false,
+            "candidates": {
+              "version": 0,
+              "status": "empty",
+              "items": []
+            },
+            "voteLedger": {
+              "status": "empty",
+              "records": [],
+              "tallies": [],
+              "winner": null,
+              "missingParticipants": [
+                "林",
+                "周",
+                "吴"
+              ],
+              "rejected": [],
+              "sourceEvents": []
+            },
+            "transitionHistory": []
+          }
+        }
+      ]
+    }
+  ]
+}

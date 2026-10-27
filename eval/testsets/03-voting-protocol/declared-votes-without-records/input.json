@@ -1,0 +1,53 @@
+{
+  "participants": [
+    {
+      "id": "林",
+      "name": "林"
+    },
+    {
+      "id": "周",
+      "name": "周"
+    },
+    {
+      "id": "吴",
+      "name": "吴"
+    }
+  ],
+  "duration": 40,
+  "transcript": [
+    {
+      "id": "discussion",
+      "start": 0,
+      "end": 2,
+      "speaker": "林",
+      "text": "我们比较共享书架和预约工具。"
+    },
+    {
+      "id": "open",
+      "start": 5,
+      "end": 6,
+      "speaker": "Core",
+      "text": "现在开始投票。",
+      "data": {
+        "phase": "voting",
+        "candidates": [
+          {
+            "id": "c1",
+            "label": "共享书架"
+          },
+          {
+            "id": "c2",
+            "label": "预约工具"
+          }
+        ]
+      }
+    },
+    {
+      "id": "declare",
+      "start": 30,
+      "end": 31,
+      "speaker": "Core",
+      "text": "投票结束，三票支持预约工具。"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "future-candidates-and-backward-seek",
+  "kind": "protocol",
+  "description": "往前/往后拖动不能把未来候选带回早期时刻。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 50,
+      "expect": {
+        "candidates.items.length": 0
+      }
+    },
+    {
+      "time": 110,
+      "expect": {
+        "candidates.items.length": 2
+      }
+    },
+    {
+      "time": 50,
+      "expect": {
+        "candidates.items.length": 0
+      }
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="MooTu 小组创意讨论促进 Agent 演示" />
-    <title>MooTu Agent Lab</title>
+    <title>MooTu Research Agent Lab</title>
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/enhancements.css" />
   </head>
@@ -157,14 +157,14 @@
         <div class="architecture-branches">
           <section class="architecture-node workflow"><small>OPTIONAL WORKFLOW</small><h3>破冰 Workflow</h3><dl><dt>输入</dt><dd>开场静默、Pod 状态</dd><dt>Tools</dt><dd>灯光接力、选择 A、等待有效发言</dd><dt>记忆</dt><dd>尝试次数与完成状态</dd><dt>输出</dt><dd>首次发言入口</dd></dl></section>
           <section class="architecture-parallel"><span>PARALLEL LOOP</span><div>
-            <section class="architecture-node agent"><small>DISCUSSION AGENT</small><h3>讨论促进 Agent</h3><dl><dt>输入</dt><dd>60s 窗口、参与/流动/发散指标</dd><dt>Tools</dt><dd>observe → evaluate → act → reflect</dd><dt>记忆</dt><dd>最近 8 个观察、两次邀请、语音预算</dd><dt>输出</dt><dd>发散/收敛、目标成员、Core/Pod 动作</dd></dl></section>
+            <section class="architecture-node agent"><small>DISCUSSION AGENT</small><h3>讨论促进 Agent</h3><dl><dt>输入</dt><dd>60s 窗口、参与/流动/发散指标</dd><dt>Tools</dt><dd>observe → evaluate → act → reflect</dd><dt>记忆</dt><dd>已批准决策历史、介入冷却与预期效果</dd><dt>输出</dt><dd>发散/收敛、目标成员、Core/Pod 动作</dd></dl></section>
             <b>⇄</b>
             <section class="architecture-node agent synthesis"><small>SYNTHESIS AGENT</small><h3>方案综合 Agent</h3><dl><dt>输入</dt><dd>讨论窗口与主题语义</dd><dt>Tools</dt><dd>聚类、去重、关键词命名、版本冻结</dd><dt>记忆</dt><dd>候选版本与来源事件</dd><dt>输出</dt><dd>≤8 字可投票方案</dd></dl></section>
           </div></section>
           <section class="architecture-node workflow"><small>TERMINAL WORKFLOW</small><h3>投票 Workflow</h3><dl><dt>输入</dt><dd>冻结候选、Pod 选择事件</dd><dt>Tools</dt><dd>展示、收票、验票、计数、公布</dd><dt>记忆</dt><dd>一次选择、票数与胜出结果</dd><dt>输出</dt><dd>彩色 Pod 状态与最终结果</dd></dl></section>
         </div>
         <div class="architecture-outputs"><i>↓</i><section class="architecture-node execution"><small>EMBODIED EXECUTION</small><h3>Core + Pod</h3><p>移动 · 朝向 · 姿态 · 最多 5 句语音 · 屏幕信息 · 灯光/温度/振动/呼吸</p></section></div>
-        <aside class="architecture-guard"><strong>确定性守卫</strong><span>DeepSeek 负责语义提案；Harness 负责证据完整性、白名单、冷却、防抖、两次邀请上限、五句语音上限与动画事务锁。邀请动画完成前，阶段与动作请求进入等待队列。</span></aside>
+        <aside class="architecture-guard"><strong>确定性守卫</strong><span>DeepSeek 负责语义提案；Harness 负责证据完整性、白名单、冷却、防抖、基于证据的邀请、介入冷却与动画事务锁。邀请动画完成前，阶段与动作请求进入等待队列。</span></aside>
       </figure>
     </dialog>
     <script type="module" src="/app.js"></script>

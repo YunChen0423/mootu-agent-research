@@ -1,10 +1,17 @@
 {
   "display": {
-    "timeline_speed_multiplier": 5,
+    "timeline_speed_multiplier": 1,
     "transcript_speed_multiplier": 1
   },
   "core": {
-    "channels": ["move", "orient", "posture", "voice", "expression", "display"],
+    "channels": [
+      "move",
+      "orient",
+      "posture",
+      "voice",
+      "expression",
+      "display"
+    ],
     "strategies": {
       "invite_quiet_member": {
         "label": "低压力邀请",
@@ -63,25 +70,52 @@
     }
   },
   "pod": {
-    "channels": ["emotional_tone", "temperature", "vibration", "breathing"],
+    "channels": [
+      "emotional_tone",
+      "temperature",
+      "vibration",
+      "breathing"
+    ],
     "responses": {
-      "normal": { "emotional_tone": "陪伴", "temperature": "恒温", "vibration": "—", "breathing": "—" },
-      "low_participation": { "emotional_tone": "鼓励", "temperature": "升温后恒温", "vibration": "振 1 次", "breathing": "缓慢呼吸" },
-      "physiological_alert": { "emotional_tone": "安抚", "temperature": "升温后恒温", "vibration": "—", "breathing": "缓慢呼吸" },
-      "contribution_complete": { "emotional_tone": "奖励认可", "temperature": "恒温", "vibration": "振 2 次", "breathing": "振 2 次" }
+      "normal": {
+        "emotional_tone": "陪伴",
+        "temperature": "恒温",
+        "vibration": "—",
+        "breathing": "—"
+      },
+      "low_participation": {
+        "emotional_tone": "鼓励",
+        "temperature": "升温后恒温",
+        "vibration": "振 1 次",
+        "breathing": "缓慢呼吸"
+      },
+      "physiological_alert": {
+        "emotional_tone": "安抚",
+        "temperature": "升温后恒温",
+        "vibration": "—",
+        "breathing": "缓慢呼吸"
+      },
+      "contribution_complete": {
+        "emotional_tone": "奖励认可",
+        "temperature": "恒温",
+        "vibration": "振 2 次",
+        "breathing": "振 2 次"
+      }
     }
   },
   "thresholds": {
     "window_seconds": 60,
     "quiet_member_seconds": 70,
     "quiet_invitation_cooldown_seconds": 70,
-    "max_invitation_count": 2,
-    "max_robot_utterances": 5,
+    "max_invitation_count": null,
+    "max_robot_utterances": null,
     "convergence_prompt_cooldown_seconds": 135,
-    "max_convergence_prompts": 1,
+    "max_convergence_prompts": null,
     "silence_thinking_seconds": 10,
     "silence_stalled_seconds": 18,
     "intervention_cooldown_seconds": 35,
-    "converge_after_seconds": 170
+    "converge_after_seconds": null,
+    "checkpoint_seconds": 30,
+    "planned_duration_seconds": null
   }
 }

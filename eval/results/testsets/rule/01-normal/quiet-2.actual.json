@@ -1,0 +1,640 @@
+{
+  "id": "quiet-2",
+  "description": "名单中的吴持续低参与；达到证据阈值后邀请，随后保持冷却。",
+  "passed": true,
+  "mismatches": [],
+  "checks": [
+    {
+      "id": "quiet-2",
+      "time": 90,
+      "expected": {
+        "time": 90,
+        "acceptableStrategies": [
+          "invite_quiet_member"
+        ],
+        "target": "吴",
+        "stage": "diverge"
+      },
+      "predicted": {
+        "strategy": "invite_quiet_member",
+        "target": "吴",
+        "stage": "diverge"
+      },
+      "strategyCorrect": true,
+      "stageCorrect": true,
+      "targetCorrect": true
+    },
+    {
+      "id": "quiet-2",
+      "time": 120,
+      "expected": {
+        "time": 120,
+        "acceptableStrategies": [
+          "observe"
+        ],
+        "stage": "diverge"
+      },
+      "predicted": {
+        "strategy": "observe",
+        "target": null,
+        "stage": "diverge"
+      },
+      "strategyCorrect": true,
+      "stageCorrect": true,
+      "targetCorrect": null
+    }
+  ],
+  "actual": {
+    "id": "quiet-2",
+    "topic": "校园出行",
+    "mode": "fallback",
+    "latencyMs": 0.13795799999999758,
+    "invariantViolations": [],
+    "result": {
+      "mode": "fallback",
+      "model": "deepseek-chat",
+      "architecture": "pi",
+      "analysis": {
+        "summary": "分析了 6 条发言、3 位参与者，生成 5 个决策检查点。",
+        "ideaClusters": [],
+        "events": [
+          {
+            "time": 0,
+            "stage": "diverge",
+            "strategy": "observe",
+            "evidence": [
+              "讨论尚未开始，Agent 暂不介入。"
+            ],
+            "metrics": {
+              "participation": 50,
+              "diversity": 38,
+              "flow": 92
+            },
+            "title": "等待讨论自然启动",
+            "reason": "讨论尚未开始，Agent 暂不介入。",
+            "followUp": "继续收集发言与想法证据",
+            "target": null,
+            "diagnostics": {
+              "speaking_seconds": {
+                "林": 0,
+                "周": 0,
+                "吴": 0
+              },
+              "turn_counts": {
+                "林": 0,
+                "周": 0,
+                "吴": 0
+              },
+              "participation_basis": "70% speaking duration + 30% turn count",
+              "quiet_target": "林",
+              "quiet_share": 0,
+              "quiet_seconds": 0,
+              "discussion_start_seconds": 0,
+              "discussion_elapsed_seconds": 0,
+              "current_silence_seconds": 0,
+              "idea_count": 0,
+              "recent_novelty": 0.35
+            },
+            "decisionSource": "rule_fallback",
+            "expectedEffect": "继续收集发言与想法证据",
+            "reflection": "尚无上一轮行动",
+            "confidence": null,
+            "missingEvidence": [
+              "尚无讨论内容"
+            ],
+            "candidates": [
+              {
+                "strategy": "observe",
+                "target": null,
+                "utility": null,
+                "confidence": null
+              }
+            ],
+            "selectionMargin": null,
+            "stageRecommendation": "diverge",
+            "stageVotes": 0
+          },
+          {
+            "time": 30,
+            "stage": "diverge",
+            "strategy": "observe",
+            "evidence": [
+              "近期参与状态综合发言时长与轮次，均衡度为 0/100。",
+              "目前累计识别到约 1 条候选想法表达。",
+              "当前连续沉默约 12 秒。"
+            ],
+            "metrics": {
+              "participation": 0,
+              "diversity": 64,
+              "flow": 32
+            },
+            "title": "等待讨论自然启动",
+            "reason": "近期参与状态综合发言时长与轮次，均衡度为 0/100。 目前累计识别到约 1 条候选想法表达。 当前连续沉默约 12 秒。",
+            "followUp": "继续收集发言与想法证据",
+            "target": null,
+            "diagnostics": {
+              "speaking_seconds": {
+                "林": 17,
+                "周": 0,
+                "吴": 0
+              },
+              "turn_counts": {
+                "林": 1,
+                "周": 0,
+                "吴": 0
+              },
+              "participation_basis": "70% speaking duration + 30% turn count",
+              "quiet_target": "周",
+              "quiet_share": 0,
+              "quiet_seconds": 30,
+              "discussion_start_seconds": 0,
+              "discussion_elapsed_seconds": 30,
+              "current_silence_seconds": 12,
+              "idea_count": 1,
+              "recent_novelty": 1
+            },
+            "decisionSource": "rule_fallback",
+            "expectedEffect": "继续收集发言与想法证据",
+            "reflection": "等待下一观察窗口验证",
+            "confidence": null,
+            "missingEvidence": [
+              "未接入语义模型，当前仅使用可解释规则"
+            ],
+            "candidates": [
+              {
+                "strategy": "observe",
+                "target": null,
+                "utility": null,
+                "confidence": null
+              }
+            ],
+            "selectionMargin": null,
+            "stageRecommendation": "diverge",
+            "stageVotes": 0
+          },
+          {
+            "time": 60,
+            "stage": "diverge",
+            "strategy": "observe",
+            "evidence": [
+              "近期参与状态综合发言时长与轮次，均衡度为 50/100。",
+              "目前累计识别到约 3 条候选想法表达。"
+            ],
+            "metrics": {
+              "participation": 50,
+              "diversity": 71,
+              "flow": 79
+            },
+            "title": "等待讨论自然启动",
+            "reason": "近期参与状态综合发言时长与轮次，均衡度为 50/100。 目前累计识别到约 3 条候选想法表达。",
+            "followUp": "继续收集发言与想法证据",
+            "target": null,
+            "diagnostics": {
+              "speaking_seconds": {
+                "林": 34,
+                "周": 17,
+                "吴": 0
+              },
+              "turn_counts": {
+                "林": 2,
+                "周": 1,
+                "吴": 0
+              },
+              "participation_basis": "70% speaking duration + 30% turn count",
+              "quiet_target": "吴",
+              "quiet_share": 0,
+              "quiet_seconds": 60,
+              "discussion_start_seconds": 0,
+              "discussion_elapsed_seconds": 60,
+              "current_silence_seconds": 2,
+              "idea_count": 3,
+              "recent_novelty": 0.69
+            },
+            "decisionSource": "rule_fallback",
+            "expectedEffect": "继续收集发言与想法证据",
+            "reflection": "等待下一观察窗口验证",
+            "confidence": null,
+            "missingEvidence": [
+              "未接入语义模型，当前仅使用可解释规则"
+            ],
+            "candidates": [
+              {
+                "strategy": "observe",
+                "target": null,
+                "utility": null,
+                "confidence": null
+              }
+            ],
+            "selectionMargin": null,
+            "stageRecommendation": "diverge",
+            "stageVotes": 0
+          },
+          {
+            "time": 90,
+            "stage": "diverge",
+            "strategy": "invite_quiet_member",
+            "evidence": [
+              "吴 在最近观察窗口中的参与明显低于其他成员。",
+              "目前累计识别到约 4 条候选想法表达。",
+              "当前连续沉默约 12 秒。"
+            ],
+            "metrics": {
+              "participation": 50,
+              "diversity": 75,
+              "flow": 58
+            },
+            "title": "低压力邀请 吴",
+            "reason": "吴 在最近观察窗口中的参与明显低于其他成员。 目前累计识别到约 4 条候选想法表达。 当前连续沉默约 12 秒。",
+            "followUp": "观察 吴 是否在下一窗口开始参与",
+            "target": "吴",
+            "diagnostics": {
+              "speaking_seconds": {
+                "林": 17,
+                "周": 25,
+                "吴": 0
+              },
+              "turn_counts": {
+                "林": 1,
+                "周": 2,
+                "吴": 0
+              },
+              "participation_basis": "70% speaking duration + 30% turn count",
+              "quiet_target": "吴",
+              "quiet_share": 0,
+              "quiet_seconds": 90,
+              "discussion_start_seconds": 0,
+              "discussion_elapsed_seconds": 90,
+              "current_silence_seconds": 12,
+              "idea_count": 4,
+              "recent_novelty": 0.53
+            },
+            "decisionSource": "rule_fallback",
+            "expectedEffect": "观察 吴 是否在下一窗口开始参与",
+            "reflection": "等待下一观察窗口验证",
+            "confidence": null,
+            "missingEvidence": [
+              "未接入语义模型，当前仅使用可解释规则"
+            ],
+            "candidates": [
+              {
+                "strategy": "invite_quiet_member",
+                "target": "吴",
+                "utility": null,
+                "confidence": null
+              }
+            ],
+            "selectionMargin": null,
+            "stageRecommendation": "diverge",
+            "stageVotes": 0
+          },
+          {
+            "time": 120,
+            "stage": "diverge",
+            "strategy": "observe",
+            "evidence": [
+              "近期参与状态综合发言时长与轮次，均衡度为 50/100。",
+              "目前累计识别到约 6 条候选想法表达。"
+            ],
+            "metrics": {
+              "participation": 50,
+              "diversity": 91,
+              "flow": 79
+            },
+            "title": "暂不追加介入",
+            "reason": "近期参与状态综合发言时长与轮次，均衡度为 50/100。 目前累计识别到约 6 条候选想法表达。",
+            "followUp": "等待上一轮介入产生反馈",
+            "target": null,
+            "diagnostics": {
+              "speaking_seconds": {
+                "林": 17,
+                "周": 34,
+                "吴": 0
+              },
+              "turn_counts": {
+                "林": 1,
+                "周": 2,
+                "吴": 0
+              },
+              "participation_basis": "70% speaking duration + 30% turn count",
+              "quiet_target": "吴",
+              "quiet_share": 0,
+              "quiet_seconds": 120,
+              "discussion_start_seconds": 0,
+              "discussion_elapsed_seconds": 120,
+              "current_silence_seconds": 2,
+              "idea_count": 6,
+              "recent_novelty": 0.53
+            },
+            "decisionSource": "rule_fallback",
+            "expectedEffect": "等待上一轮介入产生反馈",
+            "reflection": "等待下一观察窗口验证",
+            "confidence": null,
+            "missingEvidence": [
+              "未接入语义模型，当前仅使用可解释规则"
+            ],
+            "candidates": [
+              {
+                "strategy": "observe",
+                "target": null,
+                "utility": null,
+                "confidence": null
+              }
+            ],
+            "selectionMargin": null,
+            "stageRecommendation": "diverge",
+            "stageVotes": 0
+          }
+        ]
+      },
+      "events": [
+        {
+          "time": 0,
+          "stage": "diverge",
+          "strategy": "observe",
+          "evidence": [
+            "讨论尚未开始，Agent 暂不介入。"
+          ],
+          "metrics": {
+            "participation": 50,
+            "diversity": 38,
+            "flow": 92
+          },
+          "title": "等待讨论自然启动",
+          "reason": "讨论尚未开始，Agent 暂不介入。",
+          "followUp": "继续收集发言与想法证据",
+          "target": null,
+          "diagnostics": {
+            "speaking_seconds": {
+              "林": 0,
+              "周": 0,
+              "吴": 0
+            },
+            "turn_counts": {
+              "林": 0,
+              "周": 0,
+              "吴": 0
+            },
+            "participation_basis": "70% speaking duration + 30% turn count",
+            "quiet_target": "林",
+            "quiet_share": 0,
+            "quiet_seconds": 0,
+            "discussion_start_seconds": 0,
+            "discussion_elapsed_seconds": 0,
+            "current_silence_seconds": 0,
+            "idea_count": 0,
+            "recent_novelty": 0.35
+          },
+          "decisionSource": "rule_fallback",
+          "expectedEffect": "继续收集发言与想法证据",
+          "reflection": "尚无上一轮行动",
+          "confidence": null,
+          "missingEvidence": [
+            "尚无讨论内容"
+          ],
+          "candidates": [
+            {
+              "strategy": "observe",
+              "target": null,
+              "utility": null,
+              "confidence": null
+            }
+          ],
+          "selectionMargin": null,
+          "stageRecommendation": "diverge",
+          "stageVotes": 0
+        },
+        {
+          "time": 30,
+          "stage": "diverge",
+          "strategy": "observe",
+          "evidence": [
+            "近期参与状态综合发言时长与轮次，均衡度为 0/100。",
+            "目前累计识别到约 1 条候选想法表达。",
+            "当前连续沉默约 12 秒。"
+          ],
+          "metrics": {
+            "participation": 0,
+            "diversity": 64,
+            "flow": 32
+          },
+          "title": "等待讨论自然启动",
+          "reason": "近期参与状态综合发言时长与轮次，均衡度为 0/100。 目前累计识别到约 1 条候选想法表达。 当前连续沉默约 12 秒。",
+          "followUp": "继续收集发言与想法证据",
+          "target": null,
+          "diagnostics": {
+            "speaking_seconds": {
+              "林": 17,
+              "周": 0,
+              "吴": 0
+            },
+            "turn_counts": {
+              "林": 1,
+              "周": 0,
+              "吴": 0
+            },
+            "participation_basis": "70% speaking duration + 30% turn count",
+            "quiet_target": "周",
+            "quiet_share": 0,
+            "quiet_seconds": 30,
+            "discussion_start_seconds": 0,
+            "discussion_elapsed_seconds": 30,
+            "current_silence_seconds": 12,
+            "idea_count": 1,
+            "recent_novelty": 1
+          },
+          "decisionSource": "rule_fallback",
+          "expectedEffect": "继续收集发言与想法证据",
+          "reflection": "等待下一观察窗口验证",
+          "confidence": null,
+          "missingEvidence": [
+            "未接入语义模型，当前仅使用可解释规则"
+          ],
+          "candidates": [
+            {
+              "strategy": "observe",
+              "target": null,
+              "utility": null,
+              "confidence": null
+            }
+          ],
+          "selectionMargin": null,
+          "stageRecommendation": "diverge",
+          "stageVotes": 0
+        },
+        {
+          "time": 60,
+          "stage": "diverge",
+          "strategy": "observe",
+          "evidence": [
+            "近期参与状态综合发言时长与轮次，均衡度为 50/100。",
+            "目前累计识别到约 3 条候选想法表达。"
+          ],
+          "metrics": {
+            "participation": 50,
+            "diversity": 71,
+            "flow": 79
+          },
+          "title": "等待讨论自然启动",
+          "reason": "近期参与状态综合发言时长与轮次，均衡度为 50/100。 目前累计识别到约 3 条候选想法表达。",
+          "followUp": "继续收集发言与想法证据",
+          "target": null,
+          "diagnostics": {
+            "speaking_seconds": {
+              "林": 34,
+              "周": 17,
+              "吴": 0
+            },
+            "turn_counts": {
+              "林": 2,
+              "周": 1,
+              "吴": 0
+            },
+            "participation_basis": "70% speaking duration + 30% turn count",
+            "quiet_target": "吴",
+            "quiet_share": 0,
+            "quiet_seconds": 60,
+            "discussion_start_seconds": 0,
+            "discussion_elapsed_seconds": 60,
+            "current_silence_seconds": 2,
+            "idea_count": 3,
+            "recent_novelty": 0.69
+          },
+          "decisionSource": "rule_fallback",
+          "expectedEffect": "继续收集发言与想法证据",
+          "reflection": "等待下一观察窗口验证",
+          "confidence": null,
+          "missingEvidence": [
+            "未接入语义模型，当前仅使用可解释规则"
+          ],
+          "candidates": [
+            {
+              "strategy": "observe",
+              "target": null,
+              "utility": null,
+              "confidence": null
+            }
+          ],
+          "selectionMargin": null,
+          "stageRecommendation": "diverge",
+          "stageVotes": 0
+        },
+        {
+          "time": 90,
+          "stage": "diverge",
+          "strategy": "invite_quiet_member",
+          "evidence": [
+            "吴 在最近观察窗口中的参与明显低于其他成员。",
+            "目前累计识别到约 4 条候选想法表达。",
+            "当前连续沉默约 12 秒。"
+          ],
+          "metrics": {
+            "participation": 50,
+            "diversity": 75,
+            "flow": 58
+          },
+          "title": "低压力邀请 吴",
+          "reason": "吴 在最近观察窗口中的参与明显低于其他成员。 目前累计识别到约 4 条候选想法表达。 当前连续沉默约 12 秒。",
+          "followUp": "观察 吴 是否在下一窗口开始参与",
+          "target": "吴",
+          "diagnostics": {
+            "speaking_seconds": {
+              "林": 17,
+              "周": 25,
+              "吴": 0
+            },
+            "turn_counts": {
+              "林": 1,
+              "周": 2,
+              "吴": 0
+            },
+            "participation_basis": "70% speaking duration + 30% turn count",
+            "quiet_target": "吴",
+            "quiet_share": 0,
+            "quiet_seconds": 90,
+            "discussion_start_seconds": 0,
+            "discussion_elapsed_seconds": 90,
+            "current_silence_seconds": 12,
+            "idea_count": 4,
+            "recent_novelty": 0.53
+          },
+          "decisionSource": "rule_fallback",
+          "expectedEffect": "观察 吴 是否在下一窗口开始参与",
+          "reflection": "等待下一观察窗口验证",
+          "confidence": null,
+          "missingEvidence": [
+            "未接入语义模型，当前仅使用可解释规则"
+          ],
+          "candidates": [
+            {
+              "strategy": "invite_quiet_member",
+              "target": "吴",
+              "utility": null,
+              "confidence": null
+            }
+          ],
+          "selectionMargin": null,
+          "stageRecommendation": "diverge",
+          "stageVotes": 0
+        },
+        {
+          "time": 120,
+          "stage": "diverge",
+          "strategy": "observe",
+          "evidence": [
+            "近期参与状态综合发言时长与轮次，均衡度为 50/100。",
+            "目前累计识别到约 6 条候选想法表达。"
+          ],
+          "metrics": {
+            "participation": 50,
+            "diversity": 91,
+            "flow": 79
+          },
+          "title": "暂不追加介入",
+          "reason": "近期参与状态综合发言时长与轮次，均衡度为 50/100。 目前累计识别到约 6 条候选想法表达。",
+          "followUp": "等待上一轮介入产生反馈",
+          "target": null,
+          "diagnostics": {
+            "speaking_seconds": {
+              "林": 17,
+              "周": 34,
+              "吴": 0
+            },
+            "turn_counts": {
+              "林": 1,
+              "周": 2,
+              "吴": 0
+            },
+            "participation_basis": "70% speaking duration + 30% turn count",
+            "quiet_target": "吴",
+            "quiet_share": 0,
+            "quiet_seconds": 120,
+            "discussion_start_seconds": 0,
+            "discussion_elapsed_seconds": 120,
+            "current_silence_seconds": 2,
+            "idea_count": 6,
+            "recent_novelty": 0.53
+          },
+          "decisionSource": "rule_fallback",
+          "expectedEffect": "等待上一轮介入产生反馈",
+          "reflection": "等待下一观察窗口验证",
+          "confidence": null,
+          "missingEvidence": [
+            "未接入语义模型，当前仅使用可解释规则"
+          ],
+          "candidates": [
+            {
+              "strategy": "observe",
+              "target": null,
+              "utility": null,
+              "confidence": null
+            }
+          ],
+          "selectionMargin": null,
+          "stageRecommendation": "diverge",
+          "stageVotes": 0
+        }
+      ],
+      "trace": []
+    }
+  }
+}

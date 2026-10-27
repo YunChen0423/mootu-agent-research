@@ -1,0 +1,17 @@
+{
+  "id": "vote-missing",
+  "kind": "protocol",
+  "description": "缺一位成员时不得宣布赢家。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 40,
+      "expect": {
+        "voteLedger.status": "incomplete",
+        "voteLedger.winner": null,
+        "voteLedger.records.length": 2
+      }
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

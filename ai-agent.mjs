@@ -1,3 +1,5 @@
+import { validateSession } from "./public/input-contract.js";
+import { EVENT_TYPES, participantSpeakers } from "./public/session-harness.js";
 import { buildObservations, runAgent } from "./public/agent-engine.js";
 import { runPiBatchAgent, runPiLiveAgent } from "./agent/pi-runtime.mjs";
 
@@ -13,15 +15,34 @@ export async function runAIAgent({
   baseUrl = defaultEnv("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
   model = defaultEnv("DEEPSEEK_MODEL", "deepseek-chat"),
   streamFn,
-  modelDefinition
+  modelDefinition,
+  onProgress
 }) {
+  const validated = validateSession({ transcript, participants, duration, discussionStart });
+  transcript = validated.transcript.filter((line) => line.type === EVENT_TYPES.PARTICIPANT_UTTERANCE);
+  participants = participants.length ? participants : participantSpeakers(transcript).map((id) => ({ id, name: id }));
+  duration = validated.duration;
+  if (!transcript.length) throw new Error("分析需要至少一条参与者发言");
   if (!apiKey && !streamFn) {
     const analysis = runAgent({ transcript, participants, duration, discussionStart, config });
     return { mode: "fallback", model, architecture: "pi", analysis, events: analysis.events, trace: [] };
   }
   const observations = buildObservations({ transcript, participants, duration, discussionStart, config });
-  const { analysis, trace, execution } = await runPiBatchAgent({ observations, participants, config, apiKey, baseUrl, model, streamFn, modelDefinition });
-  return { mode: "deepseek", model, architecture: "pi", analysis, events: analysis.events, trace, execution };
+  const events = [], trace = [], executions = [], candidateSnapshots = [];
+  let latestAnalysis = {};
+  // A fresh model context for each window: later observations cannot influence earlier actions.
+  for (const observation of observations) {
+    const result = await runPiBatchAgent({ observations: [observation], participants, memory: events, config, apiKey, baseUrl, model, streamFn, modelDefinition });
+    latestAnalysis = result.analysis;
+    events.push(...result.analysis.events);
+    await onProgress?.({ time: observation.time, events: result.analysis.events });
+    trace.push(...result.trace.map((entry) => ({ ...entry, time: observation.time })));
+    executions.push({ time: observation.time, ...result.execution });
+    candidateSnapshots.push({ time: observation.time, labels: result.analysis.voteCandidates || [] });
+  }
+  const analysis = { ...latestAnalysis, events, candidateSnapshots };
+  return { mode: "deepseek", model, architecture: "pi-causal", analysis, events, trace, execution: executions };
+
 }
 
 export async function decideLiveWithAI({

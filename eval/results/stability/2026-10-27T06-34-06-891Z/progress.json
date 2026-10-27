@@ -1,0 +1,10 @@
+{
+  "completed": 25,
+  "total": 25,
+  "latest": {
+    "id": "repeated-idea-paraphrases",
+    "repetition": 3,
+    "status": "complete",
+    "passed": false
+  }
+}

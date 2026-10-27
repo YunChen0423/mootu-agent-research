@@ -86,17 +86,22 @@ async function runToolAgent({ systemPrompt, userPayload, tools, shouldFinish, ru
   const trace = [];
   const agent = makeAgent({ systemPrompt, tools, shouldFinish, ...runtime });
   agent.subscribe((event) => { trace.push(compactTraceEvent(event)); });
-  await agent.prompt(JSON.stringify(userPayload));
+  const deadline = setTimeout(() => agent.abort(), 180000);
+  try {
+    await agent.prompt(JSON.stringify(userPayload));
+  } finally {
+    clearTimeout(deadline);
+  }
   if (agent.state.errorMessage) throw new Error(agent.state.errorMessage);
   return trace;
 }
 
 const sharedPrompt = `你是 MooTu 具身讨论促进 Agent。你只引用工具返回的可观察证据，不推断心理、生理、性格或身份。可用策略仅限：${STRATEGIES.join("、")}。每组候选必须包含 observe；只有 invite_quiet_member 可以指定已有参与者为 target。必须通过工具完成感知、评估、提案、动作生成、模拟 dispatch 和效果记录，不要直接用普通文本回答。读取类工具可以在同一轮调用；所有带状态变化的工具必须按流程顺序调用。`;
 
-export async function runPiBatchAgent({ observations, participants, config, apiKey, baseUrl, model, streamFn, modelDefinition }) {
-  const toolkit = createBatchToolset({ observations, participants, config, decisionSchema, analysisSchema });
+export async function runPiBatchAgent({ observations, participants, memory = [], config, apiKey, baseUrl, model, streamFn, modelDefinition }) {
+  const toolkit = createBatchToolset({ observations, participants, memory, config, decisionSchema, analysisSchema });
   const trace = await runToolAgent({
-    systemPrompt: `${sharedPrompt}\n流程：先调用全部 6 个感知/记忆工具；再调用 evaluate_candidates；最后依次调用 propose_intervention、generate_robot_action、dispatch_core_action、dispatch_pod_feedback、record_expected_effect。逐个覆盖输入中的全部检查点。evaluate_candidates 的 screen_topic 必须是一个语义完整、可直接显示在屏幕上的中文讨论主题，不超过 8 个字；不能截取半句话，不能写成员正在说的句子。vote_candidates 必须是从完整讨论中去重归纳出的 2 到 4 个可投票方案名称，每项不超过 8 个字，必须是名词短语而不是发言片段。`,
+    systemPrompt: `${sharedPrompt}\n流程：先调用全部 6 个感知/记忆工具；再调用 evaluate_candidates；最后依次调用 propose_intervention、generate_robot_action、dispatch_core_action、dispatch_pod_feedback、record_expected_effect。仅判断本次输入的检查点，不得虚构后续发言。evaluate_candidates 的 screen_topic 必须是一个语义完整、可直接显示在屏幕上的中文讨论主题，不超过 8 个字；不能截取半句话，不能写成员正在说的句子。vote_candidates 必须是从当前已观察到的讨论中去重归纳出的 2 到 4 个可投票方案名称，每项不超过 8 个字，必须是名词短语而不是发言片段。`,
     userPayload: { goal: "促进参与开放性、创意发散性和讨论流动性；仅在预期收益明显高于打断成本时介入", participant_count: participants.length, checkpoint_count: observations.length },
     tools: toolkit.tools,
     shouldFinish: () => toolkit.state.recorded,

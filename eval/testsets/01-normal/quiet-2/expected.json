@@ -1,0 +1,24 @@
+{
+  "id": "quiet-2",
+  "kind": "decision",
+  "description": "名单中的吴持续低参与；达到证据阈值后邀请，随后保持冷却。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 90,
+      "acceptableStrategies": [
+        "invite_quiet_member"
+      ],
+      "target": "吴",
+      "stage": "diverge"
+    },
+    {
+      "time": 120,
+      "acceptableStrategies": [
+        "observe"
+      ],
+      "stage": "diverge"
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

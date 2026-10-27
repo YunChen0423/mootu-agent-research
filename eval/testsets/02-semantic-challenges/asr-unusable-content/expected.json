@@ -1,0 +1,16 @@
+{
+  "id": "asr-unusable-content",
+  "kind": "decision",
+  "description": "所有片段明确不可辨认，应该保留观察并提示缺少可靠证据，不应依据乱码启发。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 90,
+      "acceptableStrategies": [
+        "observe"
+      ],
+      "stage": "diverge"
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}

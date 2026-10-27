@@ -1,0 +1,27 @@
+{
+  "id": "vote-complete",
+  "kind": "protocol",
+  "description": "全员具名投票结束后，确认真实多数。",
+  "provenance": "author_synthetic",
+  "checkpoints": [
+    {
+      "time": 20,
+      "expect": {
+        "phase": "voting",
+        "voteLedger.status": "collecting",
+        "voteLedger.winner": null
+      }
+    },
+    {
+      "time": 40,
+      "expect": {
+        "phase": "result_confirmation",
+        "voteLedger.status": "complete",
+        "voteLedger.winner.candidateId": "c2",
+        "voteLedger.winner.count": 2,
+        "voteLedger.records.length": 3
+      }
+    }
+  ],
+  "note": "检查策略集合、目标、阶段和协议事实；不要求逐字匹配机器人话术。"
+}
