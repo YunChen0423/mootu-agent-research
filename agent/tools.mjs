@@ -1,3 +1,4 @@
+import { preferenceSources } from "./autonomy.mjs";
 import { Type } from "typebox";
 import { sanitizeEvents, sanitizeLiveDecision } from "./policy.mjs";
 
@@ -104,7 +105,7 @@ export function createBatchToolset({ observations, participants, memory = [], co
       parameters: emptyParameters,
       executionMode: "sequential",
       execute: async () => {
-        const selected = observations.map(({ time, suggestedStage, evidence, recentTranscript }) => ({ time, suggestedStage, evidence, recentTranscript }));
+        const selected = observations.map(({ time, suggestedStage, evidence, recentTranscript, preferenceSources }) => ({ time, suggestedStage, evidence, recentTranscript, preference_sources: preferenceSources || recentTranscript, autonomy_state: memory.at(-1)?.autonomyState || null }));
         return mark("window", selected, { count: selected.length });
       }
     },
@@ -138,7 +139,7 @@ export function createBatchToolset({ observations, participants, memory = [], co
       description: "读取最近介入、预期效果与复盘记录。",
       parameters: emptyParameters,
       executionMode: "sequential",
-      execute: async () => mark("memory", memory.slice(-8), { count: Math.min(memory.length, 8) })
+      execute: async () => mark("memory", { recent_decisions: memory.slice(-8), autonomy_state: memory.at(-1)?.autonomyState || null }, { count: Math.min(memory.length, 8) })
     },
     {
       name: "check_intervention_cooldown",
@@ -160,6 +161,12 @@ export function createBatchToolset({ observations, participants, memory = [], co
       execute: async (_id, params) => {
         const missing = REQUIRED_READS.filter((name) => !state.reads.has(name));
         if (missing.length) return errorResult(`评估前缺少工具读取：${missing.join(", ")}`, "perception_tools_required");
+        for (const observation of observations) {
+          const event = params.events.find(event => event.time === observation.time);
+          const expected = (observation.preferenceSources || observation.recentTranscript).map(source => source.id);
+          const reviewed = event?.reviewed_source_ids;
+          if (!Array.isArray(reviewed) || expected.some(id => !reviewed.includes(id)) || reviewed.some(id => !expected.includes(id))) return errorResult(`必须逐条审查 ${observation.time}s preference_sources，并在 reviewed_source_ids 返回其全部 ID；有意愿则填写 preference_updates，没有则 []。`, "preference_review_required");
+        }
         const events = sanitizeEvents(params.events, observations, participants, config, memory);
         const screenTopic = [params.screen_topic, ...(params.idea_clusters || [])]
           .map((value) => String(value || "").replace(/[。！？；;，,].*$/, "").replace(/^(?:讨论|关于|主题)[：:\s]*/, "").trim())
@@ -186,7 +193,7 @@ export function createLiveToolset({ transcript, participants, stage, signal, mem
       description: "读取当前阶段、传感信号和最近逐字稿。",
       parameters: emptyParameters,
       executionMode: "sequential",
-      execute: async () => mark("window", { stage, signal, recent_transcript: recentTranscript }, { transcriptCount: recentTranscript.length })
+      execute: async () => mark("window", { stage, signal, recent_transcript: recentTranscript, preference_sources: preferenceSources(transcript, Number(signal.sessionTime) || 0), autonomy_state: memory.at(-1)?.autonomyState || null }, { transcriptCount: recentTranscript.length })
     },
     {
       name: "get_participation_metrics",
@@ -218,7 +225,7 @@ export function createLiveToolset({ transcript, participants, stage, signal, mem
       description: "读取最近介入、预期效果与阶段防抖记录。",
       parameters: emptyParameters,
       executionMode: "sequential",
-      execute: async () => mark("memory", memory.slice(-8), { count: Math.min(memory.length, 8) })
+      execute: async () => mark("memory", { recent_decisions: memory.slice(-8), autonomy_state: memory.at(-1)?.autonomyState || null }, { count: Math.min(memory.length, 8) })
     },
     {
       name: "check_intervention_cooldown",
@@ -241,7 +248,7 @@ export function createLiveToolset({ transcript, participants, stage, signal, mem
       execute: async (_id, params) => {
         const missing = REQUIRED_READS.filter((name) => !state.reads.has(name));
         if (missing.length) return errorResult(`评估前缺少工具读取：${missing.join(", ")}`, "perception_tools_required");
-        state.decision = sanitizeLiveDecision(params, { participants, stage, transcript, memory, config });
+        state.decision = sanitizeLiveDecision(params, { participants, stage, transcript, memory, config, sessionTime: Number(signal.sessionTime) || 0 });
         return jsonResult(state.decision, { strategy: state.decision.strategy });
       }
     }
