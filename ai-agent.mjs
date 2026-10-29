@@ -31,8 +31,17 @@ export async function runAIAgent({
   const events = [], trace = [], executions = [], candidateSnapshots = [];
   let latestAnalysis = {};
   // A fresh model context for each window: later observations cannot influence earlier actions.
-  for (const observation of observations) {
-    const result = await runPiBatchAgent({ observations: [observation], participants, memory: events, config, apiKey, baseUrl, model, streamFn, modelDefinition });
+  for (const baseObservation of observations) {
+    const reviewed = new Set(events.at(-1)?.autonomyState?.reviewedSourceIds || []);
+    const observation = { ...baseObservation, preferenceSources: transcript.filter(line => line.end <= baseObservation.time && !reviewed.has(line.id)) };
+    let result;
+    try {
+      result = await runPiBatchAgent({ observations: [observation], participants, memory: events, config, apiKey, baseUrl, model, streamFn, modelDefinition });
+    } catch (error) {
+      error.time = observation.time;
+      error.partialEvents = [...events];
+      throw error;
+    }
     latestAnalysis = result.analysis;
     events.push(...result.analysis.events);
     await onProgress?.({ time: observation.time, events: result.analysis.events });

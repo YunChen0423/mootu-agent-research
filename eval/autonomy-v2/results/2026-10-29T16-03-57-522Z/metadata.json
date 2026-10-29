@@ -1,0 +1,147 @@
+{
+  "startedAt": "2026-10-29T16:03:57.524Z",
+  "model": "deepseek-chat",
+  "providerOrigin": "https://api.deepseek.com",
+  "rounds": 1,
+  "concurrency": 2,
+  "sampling": "provider defaults; no temperature or seed override; not a determinism guarantee",
+  "node": "v24.14.0",
+  "datasetSha256": "7f3fd194e9f0bb91f04e0a92862e3a9c164ac6685cf68583583b3e1fea6642e2",
+  "sourceManifest": {
+    "ai-agent.mjs": "c9f71710253a89176b7d7fb0835c11f83f7a0605b509f844bfbab474245713bf",
+    "public/agent-engine.js": "9c60a29ec0134311e6b67a624fda0db1b973eb0c355c4ff0e7c1a55f83e46528",
+    "public/config/actions.json": "40e5f4445ca685958db5e8caf22143beb6b4e254fe8f24bbe548400d46b2bd3f",
+    "agent/autonomy.mjs": "fe5ca27a2efc72cc6decc102200462d988c3b11ba8fba59d36b87a1326118c34",
+    "agent/memory.mjs": "906dae5bd82789f0688dfc7bdf876b062849c14c064c62dc553e07bb0b34eb39",
+    "agent/pi-runtime.mjs": "cefb11e65f36ad0ae36049f3bf80b213100dee6586c92c19bba932fe89339c79",
+    "agent/policy.mjs": "0e9f31acf972ca316f7c4141cf4f6c133d97b4b28370dfb5f6d1cf15e6fd37f6",
+    "agent/session-router.mjs": "ea642fc6e6492a27de32cb704aa4c277230f62ddc1d52e756ae813f995f0510d",
+    "agent/skills.mjs": "794b1c37f3c0576612bc8e04fe5b1376c0453e65e9bbb5e6bad7aea5d677a09f",
+    "agent/tools.mjs": "b092ea3ea987753a65bc764b41935a24ebb3716668482a2cca8f309f492380ad",
+    "agent/workflows.mjs": "51ab58db8ea7fb6652570a03331c340039ab3b396a33e9bc2a2cd5187320c4ae",
+    "eval/autonomy-v2/score.mjs": "e60b83fa449d9b0295bdc8356880747cc0596fc336ebf4c9f05dc1ba7f6b11d5",
+    "eval/autonomy-v2/run.mjs": "8cf7353f94e660cf1563e09e6ceb81eed9d544262e4d421da0e6ba68cd69a77a"
+  },
+  "config": {
+    "display": {
+      "timeline_speed_multiplier": 1,
+      "transcript_speed_multiplier": 1
+    },
+    "core": {
+      "channels": [
+        "move",
+        "orient",
+        "posture",
+        "voice",
+        "expression",
+        "display"
+      ],
+      "strategies": {
+        "invite_quiet_member": {
+          "label": "低压力邀请",
+          "move": "轻微朝少说者方向移动",
+          "orient": "头颈朝向少说者",
+          "posture": "前倾",
+          "voice": "邀请",
+          "expression": "鼓励",
+          "display": "{{target}}，如果你愿意，也想听听你的想法。"
+        },
+        "open_new_direction": {
+          "label": "激活新方向",
+          "move": "保持位置",
+          "orient": "环视一圈",
+          "posture": "抬头",
+          "voice": "启发",
+          "expression": "好奇",
+          "display": "我们还可以尝试一个完全不同的方向吗？"
+        },
+        "sustain_flow": {
+          "label": "维持生成",
+          "move": "保持位置",
+          "orient": "环视一圈",
+          "posture": "前倾",
+          "voice": "追问",
+          "expression": "思考",
+          "display": "这个想法还能往哪一步延伸？"
+        },
+        "prepare_convergence": {
+          "label": "建议阶段转换",
+          "move": "保持位置",
+          "orient": "环视一圈",
+          "posture": "抬头",
+          "voice": "总结",
+          "expression": "专注",
+          "display": "我们已经有几个方向了，要不要开始比较一下？"
+        },
+        "advance_decision": {
+          "label": "推进收敛",
+          "move": "保持位置",
+          "orient": "环视一圈",
+          "posture": "前倾",
+          "voice": "总结",
+          "expression": "坚定",
+          "display": "目前更倾向哪个方案？可以从价值、成本和可行性来比较。"
+        },
+        "observe": {
+          "label": "保持观察",
+          "move": "保持位置",
+          "orient": "面向小组",
+          "posture": "中立",
+          "voice": "保持安静",
+          "expression": "倾听",
+          "display": ""
+        }
+      }
+    },
+    "pod": {
+      "channels": [
+        "emotional_tone",
+        "temperature",
+        "vibration",
+        "breathing"
+      ],
+      "responses": {
+        "normal": {
+          "emotional_tone": "陪伴",
+          "temperature": "恒温",
+          "vibration": "—",
+          "breathing": "—"
+        },
+        "low_participation": {
+          "emotional_tone": "鼓励",
+          "temperature": "升温后恒温",
+          "vibration": "振 1 次",
+          "breathing": "缓慢呼吸"
+        },
+        "physiological_alert": {
+          "emotional_tone": "安抚",
+          "temperature": "升温后恒温",
+          "vibration": "—",
+          "breathing": "缓慢呼吸"
+        },
+        "contribution_complete": {
+          "emotional_tone": "奖励认可",
+          "temperature": "恒温",
+          "vibration": "振 2 次",
+          "breathing": "振 2 次"
+        }
+      }
+    },
+    "thresholds": {
+      "window_seconds": 60,
+      "quiet_member_seconds": 70,
+      "quiet_invitation_cooldown_seconds": 70,
+      "max_invitation_count": null,
+      "max_robot_utterances": null,
+      "convergence_prompt_cooldown_seconds": 135,
+      "max_convergence_prompts": null,
+      "silence_thinking_seconds": 10,
+      "silence_stalled_seconds": 18,
+      "intervention_cooldown_seconds": 35,
+      "converge_after_seconds": null,
+      "checkpoint_seconds": 30,
+      "planned_duration_seconds": null
+    }
+  },
+  "rubric": "Legacy strategy agreement and new autonomy contracts reported separately. Author synthetic; not independently labelled or held out."
+}
