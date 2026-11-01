@@ -1,0 +1,15 @@
+[
+  {
+    "name": "research",
+    "mode": "fallback",
+    "assets": "ok",
+    "decisions": 5,
+    "invalidStatus": 400
+  },
+  {
+    "name": "demo",
+    "mode": "fallback",
+    "assets": "ok",
+    "decisions": 7
+  }
+]

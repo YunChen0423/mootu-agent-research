@@ -1,0 +1,22 @@
+{
+  "id": "duplicate-event-id",
+  "description": "重复事件 ID 应拒绝，避免票据和证据歧义。",
+  "passed": true,
+  "mismatches": [],
+  "checks": [
+    {
+      "expectedErrorContains": "唯一",
+      "predicted": {
+        "accepted": false,
+        "status": 400,
+        "error": "事件 id 必须唯一"
+      },
+      "passed": true
+    }
+  ],
+  "actual": {
+    "accepted": false,
+    "status": 400,
+    "error": "事件 id 必须唯一"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "negative-duration",
+  "description": "发言结束早于开始，应拒绝。",
+  "passed": true,
+  "mismatches": [],
+  "checks": [
+    {
+      "expectedErrorContains": "时间",
+      "predicted": {
+        "accepted": false,
+        "status": 400,
+        "error": "transcript[0] 时间必须为秒数，且 0 <= start < end"
+      },
+      "passed": true
+    }
+  ],
+  "actual": {
+    "accepted": false,
+    "status": 400,
+    "error": "transcript[0] 时间必须为秒数，且 0 <= start < end"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "string-timestamp",
+  "description": "API 契约要求数值秒数，应拒绝字符串。",
+  "passed": true,
+  "mismatches": [],
+  "checks": [
+    {
+      "expectedErrorContains": "时间",
+      "predicted": {
+        "accepted": false,
+        "status": 400,
+        "error": "transcript[0] 时间必须为秒数，且 0 <= start < end"
+      },
+      "passed": true
+    }
+  ],
+  "actual": {
+    "accepted": false,
+    "status": 400,
+    "error": "transcript[0] 时间必须为秒数，且 0 <= start < end"
+  }
+}

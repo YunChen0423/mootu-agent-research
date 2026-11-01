@@ -1,0 +1,137 @@
+{
+  "id": "declared-votes-without-records",
+  "description": "机器人宣告三票不等于实际存在三张具名票。",
+  "passed": true,
+  "mismatches": [],
+  "checks": [
+    {
+      "time": 40,
+      "key": "voteLedger.status",
+      "expected": "empty",
+      "predicted": "empty",
+      "passed": true
+    },
+    {
+      "time": 40,
+      "key": "voteLedger.records.length",
+      "expected": 0,
+      "predicted": 0,
+      "passed": true
+    },
+    {
+      "time": 40,
+      "key": "voteLedger.winner",
+      "expected": null,
+      "predicted": null,
+      "passed": true
+    },
+    {
+      "time": 40,
+      "key": "voteLedger.tallies.0.count",
+      "expected": 0,
+      "predicted": 0,
+      "passed": true
+    },
+    {
+      "time": 40,
+      "key": "voteLedger.tallies.1.count",
+      "expected": 0,
+      "predicted": 0,
+      "passed": true
+    }
+  ],
+  "actual": [
+    {
+      "time": 40,
+      "blackboard": {
+        "sessionTime": 40,
+        "phase": "result_confirmation",
+        "discussionStage": null,
+        "activeAgent": "router",
+        "activeWorkflow": "voting",
+        "coactiveAgents": [
+          "router"
+        ],
+        "participants": [
+          {
+            "id": "林",
+            "name": "林"
+          },
+          {
+            "id": "周",
+            "name": "周"
+          },
+          {
+            "id": "吴",
+            "name": "吴"
+          }
+        ],
+        "podMap": [
+          {
+            "participantId": "林",
+            "podId": "pod-1"
+          },
+          {
+            "participantId": "周",
+            "podId": "pod-2"
+          },
+          {
+            "participantId": "吴",
+            "podId": "pod-3"
+          }
+        ],
+        "currentEvent": {
+          "id": "declare",
+          "start": 30,
+          "end": 31,
+          "speaker": "Core",
+          "text": "投票结束，三票支持预约工具。",
+          "type": "robot_utterance"
+        },
+        "ballotLightsReady": false,
+        "candidates": {
+          "version": "open",
+          "status": "ready",
+          "sourceEventId": "open",
+          "items": [
+            {
+              "id": "c1",
+              "label": "共享书架",
+              "sourceEventId": "open"
+            },
+            {
+              "id": "c2",
+              "label": "预约工具",
+              "sourceEventId": "open"
+            }
+          ]
+        },
+        "voteLedger": {
+          "status": "empty",
+          "records": [],
+          "tallies": [
+            {
+              "candidateId": "c1",
+              "label": "共享书架",
+              "count": 0
+            },
+            {
+              "candidateId": "c2",
+              "label": "预约工具",
+              "count": 0
+            }
+          ],
+          "winner": null,
+          "missingParticipants": [
+            "林",
+            "周",
+            "吴"
+          ],
+          "rejected": [],
+          "sourceEvents": []
+        },
+        "transitionHistory": []
+      }
+    }
+  ]
+}
