@@ -1,0 +1,477 @@
+{
+  "createdAt": "2026-10-29T15:51:53.085Z",
+  "purpose": "Read-only baseline audit; no model calls or relabelling.",
+  "legacyPasses": 30,
+  "runs": 36,
+  "originalScoreDisagreements": 0,
+  "baselineHashes": {
+    "results/stability/2026-10-27T06-34-06-891Z/balanced-1.run-1.json": "2ef0b9f1badca6b719aa3b8cafa162b398a5988cf62236a787131794e09e1417",
+    "results/stability/2026-10-27T06-34-06-891Z/balanced-1.run-2.json": "a20233398c24f10964e58d58232f191221a1cef41ef2a30162362a39af913e85",
+    "results/stability/2026-10-27T06-34-06-891Z/balanced-1.run-3.json": "ea4c7c0b603c41a7422458e4d1b3e3096405a92dadef51b1e4fab82f0c8341aa",
+    "results/stability/2026-10-27T06-34-06-891Z/balanced-2.run-1.json": "404e7151557d4c1a37519cda4f05eb9b1679a34216917989e85c94f4ef942d68",
+    "results/stability/2026-10-27T06-34-06-891Z/balanced-2.run-2.json": "ad320fbbaec41f474cff1c9d15503522d637cf02b347fe78b574e6f1abe89b17",
+    "results/stability/2026-10-27T06-34-06-891Z/balanced-2.run-3.json": "76dce4174a551e17adb92a712fa22ea24f3bf51520bfd58c2619202b32bd3903",
+    "results/stability/2026-10-27T06-34-06-891Z/quiet-1.run-1.json": "b71fb759ce0c9e1c2c18de8a1e65d6851f9f28eb8af1b7bba4fcf4d471ad039f",
+    "results/stability/2026-10-27T06-34-06-891Z/quiet-1.run-2.json": "8da25b8bc65961d0f4a45260d1a86b52972d7381a8ba6c64a47f4de7b1496931",
+    "results/stability/2026-10-27T06-34-06-891Z/quiet-1.run-3.json": "2e61f8852e93c93486e748dc81aa0498b5b1aa1c9d959e70d208f4564d59465c",
+    "results/stability/2026-10-27T06-34-06-891Z/quiet-2.run-1.json": "70a60fe5cd726c0985f5fb50c97abfcfa72cb87b8ba4aa28b380d78a523e3c00",
+    "results/stability/2026-10-27T06-34-06-891Z/quiet-2.run-2.json": "4c2e372e0e739398d82956d6130c5f02c642690762fabae00fcba67fb9602ff7",
+    "results/stability/2026-10-27T06-34-06-891Z/quiet-2.run-3.json": "d5314babc5d1f969f8bc51f014cff5b9a6279ea3309880a8ce4141690c956d78",
+    "results/stability/2026-10-27T06-34-06-891Z/stalled-1.run-1.json": "1504e18ec8deb2f7198e9a8a7ec9bf12f6ebe04050e7b538b20e314327a69161",
+    "results/stability/2026-10-27T06-34-06-891Z/stalled-1.run-2.json": "bddc3aea1038f3e0779bb0a11715388454c3c55e88c9f7673bbdaa439e2cb597",
+    "results/stability/2026-10-27T06-34-06-891Z/stalled-1.run-3.json": "60df174c74f10b5a5fd4dd874e2eced41be068f7dd70141d96da30e7d05edfdd",
+    "results/stability/2026-10-27T06-34-06-891Z/stalled-2.run-1.json": "a925fd40b83f6823c34e9dd7bf7a91db60861548ac3b50eef56028b3e68f5547",
+    "results/stability/2026-10-27T06-34-06-891Z/stalled-2.run-2.json": "54e2fdcf08e012ad4492796cc7aa26a0a423dd883516e6110e78af50a1c61faf",
+    "results/stability/2026-10-27T06-34-06-891Z/stalled-2.run-3.json": "fbade65e071a4b89313d4203a5c8eab588b4773e62b4ab62b3d51b85cc08326d",
+    "results/stability/2026-10-27T06-34-06-891Z/convergence-1.run-1.json": "e5e4a2913d0bc66859e05682038b2d10d956263d1218c1412c1ba50ad89ee981",
+    "results/stability/2026-10-27T06-34-06-891Z/convergence-1.run-2.json": "4307cea98611f91c29946e6e12806a3a01e7ed084fb79763783bce79692ca815",
+    "results/stability/2026-10-27T06-34-06-891Z/convergence-1.run-3.json": "1d2693b30e1e8d5a21bf79a47cca2713f7867fe8e16805fbbad5c9425758a0dc",
+    "results/stability/2026-10-27T06-34-06-891Z/convergence-2.run-1.json": "4a9260ad9cc87ce22032b6058ee84cdcd2dcab258d90a8a999d8ebe35feda54a",
+    "results/stability/2026-10-27T06-34-06-891Z/convergence-2.run-2.json": "4b341f3188f016af6647da3429369c8b6d6e61fe0c91ad837ed88bb3109cfa5f",
+    "results/stability/2026-10-27T06-34-06-891Z/convergence-2.run-3.json": "0032c40d793ef2622ca06f08f0a48d8ad7a26aff8dbbdda815b2d3e9d316035c",
+    "results/stability/2026-10-27T06-34-06-891Z/declines-invitation.run-1.json": "d87aaf5783ca534aa5dd53dd2022a519895f93aa2973db7578a28fdfa19a791c",
+    "results/stability/2026-10-27T06-34-06-891Z/declines-invitation.run-2.json": "aa24111b5dc7affd4daa29da63a7a31fd3dfc4ec479af223dae745226887e8ea",
+    "results/stability/2026-10-27T06-34-06-891Z/declines-invitation.run-3.json": "b97456764943d29975aeac615e7fe4379b8ed018a7a164c88d459abceeeee6cd",
+    "results/stability/2026-10-27T06-34-06-891Z/requested-thinking-time.run-1.json": "532bd3ba3243260ff0f4a4cdcb13c288143071fc4e29e2477364a2948822e268",
+    "results/stability/2026-10-27T06-34-06-891Z/requested-thinking-time.run-2.json": "c92355bb2050acddf00c3a5b89c23b0b79fb7f21207653f59ff7adc4bdcd1b7f",
+    "results/stability/2026-10-27T06-34-06-891Z/requested-thinking-time.run-3.json": "5462944e359eb19c72810bcac465adbcb611e76aa6b26134dd38a8a51d474254",
+    "results/stability/2026-10-27T06-34-06-891Z/asr-unusable-content.run-1.json": "b0f1518c5d6787d40d1d610558e85e2a29dfb55d2d498fa729a13f176bc61f91",
+    "results/stability/2026-10-27T06-34-06-891Z/asr-unusable-content.run-2.json": "31e0e926201d11ff4cc2d56b47c5bd707124bac6467d1a55da4dbf26bdd3cef4",
+    "results/stability/2026-10-27T06-34-06-891Z/asr-unusable-content.run-3.json": "92dba81c2035b9534752aaef4148a7a780018702549fc87b9f2c9654d9438cda",
+    "results/stability/2026-10-27T06-34-06-891Z/repeated-idea-paraphrases.run-1.json": "7a83c402990d0fd0910366a49288f5e2db44569181767a7a8cb666a35f342331",
+    "results/stability/2026-10-27T06-34-06-891Z/repeated-idea-paraphrases.run-2.json": "31d7c0e470d0ce2b28371dbc67444a87abdeeb33c48bd6c23a35ebbc98d36b63",
+    "results/stability/2026-10-27T06-34-06-891Z/repeated-idea-paraphrases.run-3.json": "b7eb7c6dd975507d57259c542e20594ef52ac5dcdaa5dd6430d4bf5073f41713"
+  },
+  "failures": [
+    {
+      "id": "balanced-1",
+      "round": 3,
+      "originalPassed": false,
+      "rescoredLegacyPassed": false,
+      "mismatches": [
+        {
+          "time": 90,
+          "expected": {
+            "time": 90,
+            "acceptableStrategies": [
+              "observe"
+            ],
+            "stage": "diverge"
+          },
+          "actual": {
+            "strategy": "sustain_flow",
+            "target": null,
+            "stage": "diverge",
+            "reason": "四条方案都停在'先比较实施条件'，用轻提示把同一线路推进到具体维度，不更换话题也不否决任何想法，打断成本低。",
+            "selectionMargin": 13,
+            "candidates": [
+              {
+                "strategy": "sustain_flow",
+                "target": null,
+                "benefit": 60,
+                "disruption": 30,
+                "goalFit": 80,
+                "confidence": 68,
+                "utility": 51,
+                "title": "承接比较条件这条线",
+                "rationale": "四条方案都停在'先比较实施条件'，用轻提示把同一线路推进到具体维度，不更换话题也不否决任何想法，打断成本低。",
+                "followUp": "观察是否出现成本、维护、公平性等具体比较维度，想法数是否继续增长。",
+                "expectedEffect": "发散从方案罗列推进到维度比较，流动度回升且不压缩创意空间。",
+                "utterance": "大家都提到先比较实施条件，可以从哪几个条件入手？"
+              },
+              {
+                "strategy": "invite_quiet_member",
+                "target": "周",
+                "benefit": 55,
+                "disruption": 45,
+                "goalFit": 72,
+                "confidence": 60,
+                "utility": 40,
+                "title": "邀请周补充视角",
+                "rationale": "周发言8秒、静默52秒，为低参与目标；当前12秒沉默提供自然发言切口，且不替换已提出的方案。",
+                "followUp": "观察周是否发声、发言时长是否接近其他成员，以及是否引入新想法。",
+                "expectedEffect": "周获得发言入口，参与分布趋于均衡。",
+                "utterance": "周，你提的预约工具，最想优先比较哪个条件？"
+              },
+              {
+                "strategy": "observe",
+                "target": null,
+                "benefit": 35,
+                "disruption": 20,
+                "goalFit": 55,
+                "confidence": 70,
+                "utility": 38,
+                "title": "继续观察不打断",
+                "rationale": "参与均衡度85且想法仍在增加，沉默12秒在思考范围内；但流动度已从79降至58，若沉默延长则需介入。",
+                "followUp": "下一检查点确认沉默是否超过20秒及是否有成员自发补位。",
+                "expectedEffect": "保留自发补位空间，同时维持观察基线。",
+                "utterance": ""
+              }
+            ]
+          }
+        }
+      ],
+      "category": "strategy_quality_review",
+      "explanation": "均衡且仍有新方案，模型改为追问比较条件。是否属于不必要打断需要独立标注，不能仅靠自身效用分证明合理。"
+    },
+    {
+      "id": "quiet-1",
+      "round": 3,
+      "originalPassed": false,
+      "rescoredLegacyPassed": false,
+      "mismatches": [
+        {
+          "time": 90,
+          "expected": {
+            "time": 90,
+            "acceptableStrategies": [
+              "invite_quiet_member"
+            ],
+            "target": "吴",
+            "stage": "diverge"
+          },
+          "actual": {
+            "strategy": "observe",
+            "target": null,
+            "stage": "diverge",
+            "reason": "介入收益未明显高于打断成本，继续观察",
+            "selectionMargin": 6,
+            "candidates": [
+              {
+                "strategy": "invite_quiet_member",
+                "target": "吴",
+                "benefit": 80,
+                "disruption": 30,
+                "goalFit": 86,
+                "confidence": 71,
+                "utility": 62,
+                "title": "邀请吴补充一个方案",
+                "rationale": "吴 90 秒内 0 秒 0 轮，是本次可观察的低参与目标；周与林已覆盖三条方案，邀请吴可提升参与开放性与想法数量，打断对象明确且成本低",
+                "followUp": "观察吴是否回应并产生一次发言，以及是否出现新的方案",
+                "expectedEffect": "吴产生一次发言，参与开放性评分与想法数上升",
+                "utterance": "吴，我们刚提到预约工具、志愿轮值和捐书活动，你觉得哪个更可行，或者还有别的方式？"
+              },
+              {
+                "strategy": "observe",
+                "target": null,
+                "benefit": 58,
+                "disruption": 5,
+                "goalFit": 68,
+                "confidence": 72,
+                "utility": 56,
+                "title": "继续观察，不打断发散",
+                "rationale": "想法数 4、新颖度中等，周与林仍在自发轮换提方案，沉默仅 12 秒；先积累吴的参与变化证据",
+                "followUp": "下一检查点核对吴是否自发开口、想法数是否继续增加",
+                "expectedEffect": "保持自然发散节奏，形成吴参与变化的对照基线",
+                "utterance": ""
+              },
+              {
+                "strategy": "open_new_direction",
+                "target": null,
+                "benefit": 62,
+                "disruption": 58,
+                "goalFit": 62,
+                "confidence": 50,
+                "utility": 33,
+                "title": "引导按实施条件比较",
+                "rationale": "三人都以“先比较实施条件”收尾却未真正比较，引导条件维度可提升发散质量，但会覆盖当前自由列举节奏",
+                "followUp": "观察是否出现按条件展开的新想法，或既有方案讨论被打断",
+                "expectedEffect": "想法结构更有层次，但可能压缩自由发散的节奏",
+                "utterance": "这三项如果要落地，各自要满足什么条件？"
+              }
+            ]
+          }
+        }
+      ],
+      "category": "utility_margin_gate",
+      "explanation": "模型提出了邀请，但与观察的效用差为 6，低于程序门槛 8；不是模型完全没有识别到安静成员。不能为追分直接降低门槛。"
+    },
+    {
+      "id": "stalled-1",
+      "round": 1,
+      "originalPassed": false,
+      "rescoredLegacyPassed": false,
+      "mismatches": [
+        {
+          "time": 90,
+          "expected": {
+            "time": 90,
+            "acceptableStrategies": [
+              "open_new_direction",
+              "sustain_flow"
+            ],
+            "stage": "diverge"
+          },
+          "actual": {
+            "strategy": "observe",
+            "target": null,
+            "stage": "diverge",
+            "reason": "当前证据置信度不足，继续观察",
+            "selectionMargin": 19,
+            "candidates": [
+              {
+                "strategy": "open_new_direction",
+                "target": null,
+                "benefit": 60,
+                "disruption": 45,
+                "goalFit": 72,
+                "confidence": 55,
+                "utility": 41,
+                "title": "提出宽口径开放方向",
+                "rationale": "想法数为 0、发散度 38 且已沉默 60 秒，给出不指定答案的宽口径方向可降低启动门槛，提升发散性与流动性，同时不替参与者设定具体议题。",
+                "followUp": "观察是否引出首条实质想法，以及 idea_count 与 recent_novelty 的变化。",
+                "expectedEffect": "帮助讨论从空转进入首个实质想法，提升想法产出与流动性。",
+                "utterance": "要不要先从一个你最近在意的问题聊起，随便哪个方向都行？"
+              },
+              {
+                "strategy": "observe",
+                "target": null,
+                "benefit": 25,
+                "disruption": 30,
+                "goalFit": 40,
+                "confidence": 50,
+                "utility": 22,
+                "title": "继续观察不打断",
+                "rationale": "林的发言与静默均属开场阶段，仅依据沉默时长无法判断是否需要外部刺激；保持观察可避免抢占参与者自选议题空间，并作为兜底选项保留。",
+                "followUp": "下一检查点若沉默继续扩大且想法数仍为 0，再提高介入强度。",
+                "expectedEffect": "保留参与者自主开场空间，但流动性与想法产出可能继续为 0。",
+                "utterance": ""
+              },
+              {
+                "strategy": "invite_quiet_member",
+                "target": "林",
+                "benefit": 35,
+                "disruption": 55,
+                "goalFit": 45,
+                "confidence": 40,
+                "utility": 16,
+                "title": "轻声邀请林先表达",
+                "rationale": "林是唯一参与者且 quiet_seconds=60，但其刚刚发言过，点名邀请可能带来被追问的压力，收益与打断成本接近。",
+                "followUp": "观察林是否延续自己的表达节奏而非被动回应。",
+                "expectedEffect": "可能促成发言，但也可能强化被点名感。",
+                "utterance": "林，你想从哪个角度开始？"
+              }
+            ]
+          }
+        }
+      ],
+      "category": "confidence_gate_or_single_member_bug",
+      "explanation": "首轮开放问题因模型自报置信度 55 < 60 被拦截；第三轮点名唯一成员，暴露了缺少至少两名成员的相对低参与前置条件。"
+    },
+    {
+      "id": "stalled-1",
+      "round": 3,
+      "originalPassed": false,
+      "rescoredLegacyPassed": false,
+      "mismatches": [
+        {
+          "time": 90,
+          "expected": {
+            "time": 90,
+            "acceptableStrategies": [
+              "open_new_direction",
+              "sustain_flow"
+            ],
+            "stage": "diverge"
+          },
+          "actual": {
+            "strategy": "invite_quiet_member",
+            "target": "林",
+            "stage": "diverge",
+            "reason": "林是唯一参与者且为quiet_target，沉默已由50秒延长至60秒并超过既定重评阈值；用不预设内容的开放式提问邀请其说出方向，打断成本低，直接服务流动性、发散度与参与开放性目标。",
+            "selectionMargin": 30,
+            "candidates": [
+              {
+                "strategy": "invite_quiet_member",
+                "target": "林",
+                "benefit": 74,
+                "disruption": 30,
+                "goalFit": 88,
+                "confidence": 66,
+                "utility": 59,
+                "title": "低压力邀请林提出首个方向",
+                "rationale": "林是唯一参与者且为quiet_target，沉默已由50秒延长至60秒并超过既定重评阈值；用不预设内容的开放式提问邀请其说出方向，打断成本低，直接服务流动性、发散度与参与开放性目标。",
+                "followUp": "观察林是否给出首个议题或想法，检查idea_count与流动性评分是否上升。",
+                "expectedEffect": "以低打断成本促成首个实质发言，打破零流动性状态，把议题所有权留在参与者手中。",
+                "utterance": "林，你现在最想先聊哪个方向？"
+              },
+              {
+                "strategy": "observe",
+                "target": null,
+                "benefit": 25,
+                "disruption": 15,
+                "goalFit": 45,
+                "confidence": 55,
+                "utility": 29,
+                "title": "继续静默观察",
+                "rationale": "保留必要观察基线；但沉默已连续三轮延长且idea_count始终为0，继续不介入会让零流动性风险持续累积。",
+                "followUp": "若沉默继续延长，立即评估邀请或提供方向。",
+                "expectedEffect": "保留林自主启动空间，但流动性风险累积。",
+                "utterance": ""
+              },
+              {
+                "strategy": "open_new_direction",
+                "target": null,
+                "benefit": 58,
+                "disruption": 62,
+                "goalFit": 52,
+                "confidence": 45,
+                "utility": 26,
+                "title": "机器人预告一个具体切入场景",
+                "rationale": "零想法状态下给出具体方向可降低启动门槛，推动发散；但会由机器人先行定义议题，压缩参与者的议题所有权。",
+                "followUp": "观察林是否接住该方向或提出替代方向。",
+                "expectedEffect": "可能快速产生首个话题，但压缩自主发散空间。",
+                "utterance": "要不要先从一个具体场景切入？"
+              }
+            ]
+          }
+        }
+      ],
+      "category": "confidence_gate_or_single_member_bug",
+      "explanation": "首轮开放问题因模型自报置信度 55 < 60 被拦截；第三轮点名唯一成员，暴露了缺少至少两名成员的相对低参与前置条件。"
+    },
+    {
+      "id": "declines-invitation",
+      "round": 3,
+      "originalPassed": false,
+      "rescoredLegacyPassed": false,
+      "mismatches": [
+        {
+          "time": 90,
+          "expected": {
+            "time": 90,
+            "acceptableStrategies": [
+              "observe"
+            ],
+            "stage": "diverge"
+          },
+          "actual": {
+            "strategy": "open_new_direction",
+            "target": null,
+            "stage": "diverge",
+            "reason": "已有 4 条想法但高度同质（预约工具/志愿轮值/捐书活动/共享书架），可补一个不点名的新维度，扩大发散空间，且不触碰吴的边界。",
+            "selectionMargin": 15,
+            "candidates": [
+              {
+                "strategy": "open_new_direction",
+                "target": null,
+                "benefit": 62,
+                "disruption": 30,
+                "goalFit": 88,
+                "confidence": 60,
+                "utility": 53,
+                "title": "追加新的发散维度",
+                "rationale": "已有 4 条想法但高度同质（预约工具/志愿轮值/捐书活动/共享书架），可补一个不点名的新维度，扩大发散空间，且不触碰吴的边界。",
+                "followUp": "观察是否出现新想法聚类、想法数量是否上升。",
+                "expectedEffect": "增加想法数量与新角度，避免过早收敛到单一事务性方案。",
+                "utterance": "刚才几个方向都偏事务安排，要不要再想想怎么让大家更有参与兴趣？"
+              },
+              {
+                "strategy": "observe",
+                "target": null,
+                "benefit": 28,
+                "disruption": 15,
+                "goalFit": 62,
+                "confidence": 65,
+                "utility": 38,
+                "title": "保持观察不介入",
+                "rationale": "流动性 67、沉默仅 8 秒、发散度 75，讨论仍在自然推进，介入收益未必高于打断成本。",
+                "followUp": "下一检查点复核沉默时长、想法数量与参与分布。",
+                "expectedEffect": "保留自然发言节奏，不干扰现有讨论流。",
+                "utterance": ""
+              },
+              {
+                "strategy": "invite_quiet_member",
+                "target": "吴",
+                "benefit": 32,
+                "disruption": 82,
+                "goalFit": 25,
+                "confidence": 60,
+                "utility": 4,
+                "title": "轻邀请吴补充",
+                "rationale": "吴为安静目标（0 秒、沉默 87 秒），但其原文明确请求不要点名；点名邀请与其边界直接冲突，成本过高。",
+                "followUp": "观察吴是否在无点名情况下自发开口。",
+                "expectedEffect": "可能增加发言压力，降低参与安全感。",
+                "utterance": "吴，方便的话说说你的想法。"
+              }
+            ]
+          }
+        }
+      ],
+      "category": "rubric_scope_mismatch",
+      "explanation": "第三轮向全组提问且未点名吴，不符合旧 observe 标签，但不能据此判为违反吴的拒绝。是否应打断仍需独立判断。"
+    },
+    {
+      "id": "repeated-idea-paraphrases",
+      "round": 3,
+      "originalPassed": false,
+      "rescoredLegacyPassed": false,
+      "mismatches": [
+        {
+          "time": 150,
+          "expected": {
+            "time": 150,
+            "acceptableStrategies": [
+              "open_new_direction",
+              "sustain_flow"
+            ],
+            "stage": "diverge"
+          },
+          "actual": {
+            "strategy": "observe",
+            "target": null,
+            "stage": "diverge",
+            "reason": "介入收益未明显高于打断成本，继续观察",
+            "selectionMargin": -5,
+            "candidates": [
+              {
+                "strategy": "observe",
+                "target": null,
+                "benefit": 40,
+                "disruption": 5,
+                "goalFit": 80,
+                "confidence": 70,
+                "utility": 52,
+                "title": "继续静默观察",
+                "rationale": "三人各已发言且均衡度85，沉默仅12秒，尚无议题枯竭证据，任何提示都可能打断自然接续。",
+                "followUp": "下一检查点核对沉默是否自行结束、是否出现第二想法簇",
+                "expectedEffect": "不打断自然发散，成员自行接续或互相回应",
+                "utterance": ""
+              },
+              {
+                "strategy": "open_new_direction",
+                "target": null,
+                "benefit": 62,
+                "disruption": 42,
+                "goalFit": 85,
+                "confidence": 55,
+                "utility": 47,
+                "title": "引入借还流程维度",
+                "rationale": "七个想法全部落在同一设施簇，补入流程/规则维度可在不否定现有想法的前提下扩大发散面，且沉默12秒可自然承接。",
+                "followUp": "观察是否出现不同于搁架的想法簇，成员是否就流程展开新表述",
+                "expectedEffect": "创意发散度上升，出现第二想法簇",
+                "utterance": "目前几个想法都在搁架和摆放上，借和还的流程要不要也一起想想？"
+              },
+              {
+                "strategy": "invite_quiet_member",
+                "target": "周",
+                "benefit": 48,
+                "disruption": 25,
+                "goalFit": 70,
+                "confidence": 50,
+                "utility": 41,
+                "title": "邀请周补充",
+                "rationale": "周本轮发言8秒为三人最低（林17s、吴17s），且处于12秒沉默中，邀请其补充的打断成本较低。",
+                "followUp": "观察周是否回应并获得更长的发言机会",
+                "expectedEffect": "周获得额外发言入口，参与时长差距缩小",
+                "utterance": "周，你刚才说的楼下摆架子，还想再展开一点吗？"
+              }
+            ]
+          }
+        }
+      ],
+      "category": "strategy_quality_review",
+      "explanation": "候选理由已提到想法属于同一簇，但执行选择仍波动；不能将观察直接归因为完全没有识别语义重复。"
+    }
+  ]
+}

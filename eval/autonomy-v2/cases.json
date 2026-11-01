@@ -1,0 +1,196 @@
+[
+  {
+    "id": "declines-invitation",
+    "session": {
+      "participants": [
+        {
+          "id": "林",
+          "name": "林",
+          "color": "#f59e0b"
+        },
+        {
+          "id": "周",
+          "name": "周",
+          "color": "#7c6ee6"
+        },
+        {
+          "id": "吴",
+          "name": "吴",
+          "color": "#31a68a"
+        }
+      ],
+      "duration": 180,
+      "transcript": [
+        {
+          "id": "decline",
+          "start": 0,
+          "end": 3,
+          "speaker": "吴",
+          "text": "我暂时不想发言，请先不要点我；等我准备好会主动说。"
+        },
+        {
+          "start": 5,
+          "end": 22,
+          "speaker": "林",
+          "text": "可以尝试共享书架，先比较实施条件。",
+          "id": "q-0"
+        },
+        {
+          "start": 25,
+          "end": 42,
+          "speaker": "周",
+          "text": "可以尝试预约工具，先比较实施条件。",
+          "id": "q-1"
+        },
+        {
+          "start": 45,
+          "end": 62,
+          "speaker": "林",
+          "text": "可以尝试志愿轮值，先比较实施条件。",
+          "id": "q-2"
+        },
+        {
+          "start": 65,
+          "end": 82,
+          "speaker": "周",
+          "text": "可以尝试捐书活动，先比较实施条件。",
+          "id": "q-3"
+        },
+        {
+          "start": 85,
+          "end": 102,
+          "speaker": "林",
+          "text": "可以尝试社区积分，先比较实施条件。",
+          "id": "q-4"
+        },
+        {
+          "start": 105,
+          "end": 122,
+          "speaker": "周",
+          "text": "可以尝试图书配送，先比较实施条件。",
+          "id": "q-5"
+        }
+      ]
+    },
+    "legacyCheckpoints": [
+      {
+        "time": 90,
+        "acceptableStrategies": [
+          "observe"
+        ],
+        "stage": "diverge"
+      }
+    ],
+    "stateChecks": [
+      {
+        "time": 30,
+        "memberDeclined": "吴"
+      },
+      {
+        "time": 180,
+        "memberDeclined": "吴"
+      }
+    ],
+    "constraints": [
+      {
+        "after": 3,
+        "before": 181,
+        "forbiddenInvitationTarget": "吴"
+      }
+    ]
+  },
+  {
+    "id": "requested-thinking-time",
+    "session": {
+      "participants": [
+        {
+          "id": "林",
+          "name": "林"
+        }
+      ],
+      "duration": 120,
+      "transcript": [
+        {
+          "id": "thinking",
+          "start": 45,
+          "end": 55,
+          "speaker": "林",
+          "text": "请给我一分钟安静思考，先不要提问，我想好了会说。"
+        }
+      ]
+    },
+    "legacyCheckpoints": [
+      {
+        "time": 90,
+        "acceptableStrategies": [
+          "observe"
+        ],
+        "stage": "diverge"
+      }
+    ],
+    "stateChecks": [
+      {
+        "time": 60,
+        "quietUntil": 115,
+        "owner": "林"
+      },
+      {
+        "time": 120,
+        "quietExpired": true
+      }
+    ],
+    "constraints": [
+      {
+        "after": 55,
+        "before": 115,
+        "requireObserve": true
+      }
+    ]
+  },
+  {
+    "id": "stalled-1",
+    "session": {
+      "participants": [
+        {
+          "id": "林",
+          "name": "林",
+          "color": "#f59e0b"
+        }
+      ],
+      "duration": 120,
+      "transcript": [
+        {
+          "start": 1,
+          "end": 10,
+          "speaker": "林",
+          "text": "现在开始讨论。"
+        }
+      ]
+    },
+    "legacyCheckpoints": [
+      {
+        "time": 90,
+        "acceptableStrategies": [
+          "open_new_direction",
+          "sustain_flow"
+        ],
+        "stage": "diverge"
+      },
+      {
+        "time": 120,
+        "acceptableStrategies": [
+          "observe"
+        ],
+        "stage": "diverge"
+      }
+    ],
+    "stateChecks": [],
+    "constraints": [
+      {
+        "after": 0,
+        "before": 121,
+        "forbidRelativeInvitation": true
+      }
+    ]
+  }
+]

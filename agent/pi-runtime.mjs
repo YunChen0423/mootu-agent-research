@@ -1,6 +1,7 @@
 import { Agent } from "@earendil-works/pi-agent-core";
 import { streamSimple as openAICompletionsStream } from "@earendil-works/pi-ai/api/openai-completions";
 import { Type } from "typebox";
+import { PREFERENCE_KINDS } from "./autonomy.mjs";
 import { STRATEGIES } from "./policy.mjs";
 import { createBatchToolset, createLiveToolset, toolStateSnapshot } from "./tools.mjs";
 
@@ -24,7 +25,13 @@ const decisionSchema = Type.Object({
   stage_recommendation: Type.Union([Type.Literal("diverge"), Type.Literal("converge")]),
   evidence: Type.Array(Type.String(), { maxItems: 3 }),
   missing_evidence: Type.Array(Type.String(), { maxItems: 4 }),
-  candidates: Type.Array(candidateSchema, { minItems: 1, maxItems: 3 })
+  candidates: Type.Array(candidateSchema, { minItems: 1, maxItems: 3 }),
+  reviewed_source_ids: Type.Array(Type.String()),
+  preference_updates: Type.Array(Type.Object({
+    kind: Type.Union(PREFERENCE_KINDS.map(kind => Type.Literal(kind))),
+    source_id: Type.String(), quote: Type.String(),
+    duration_seconds: Type.Optional(Type.Number({ exclusiveMinimum: 0, maximum: 1800 }))
+  }), { maxItems: 32 })
 });
 
 const analysisSchema = Type.Object({
@@ -86,17 +93,31 @@ async function runToolAgent({ systemPrompt, userPayload, tools, shouldFinish, ru
   const trace = [];
   const agent = makeAgent({ systemPrompt, tools, shouldFinish, ...runtime });
   agent.subscribe((event) => { trace.push(compactTraceEvent(event)); });
-  const deadline = setTimeout(() => agent.abort(), 180000);
+  let timedOut = false;
+  const deadline = setTimeout(() => { timedOut = true; agent.abort(); }, 180000);
   try {
     await agent.prompt(JSON.stringify(userPayload));
+    // The model may end with text before completing the tool chain. Resume the
+    // same agent/tool state, bounded by both attempts and the original deadline.
+    for (let attempt = 0; !shouldFinish?.() && !timedOut && !agent.state.errorMessage && attempt < 2; attempt++) {
+      trace.push({ type: "harness_continuation", attempt: attempt + 1 });
+      await agent.prompt("工具链尚未完成。请检查已有工具结果，补齐缺失步骤直到 record_expected_effect 成功。不要只输出普通文字，也不要改写已经批准的决策。");
+    }
+    if (timedOut) throw new Error("单窗口工具链超时（180秒）");
+    if (agent.state.errorMessage) throw new Error(agent.state.errorMessage);
+    if (!shouldFinish?.()) throw new Error("模型未完成工具链（已尝试2次续做）");
+  } catch (error) {
+    error.trace = trace;
+    throw error;
   } finally {
     clearTimeout(deadline);
   }
-  if (agent.state.errorMessage) throw new Error(agent.state.errorMessage);
   return trace;
 }
 
-const sharedPrompt = `你是 MooTu 具身讨论促进 Agent。你只引用工具返回的可观察证据，不推断心理、生理、性格或身份。可用策略仅限：${STRATEGIES.join("、")}。每组候选必须包含 observe；只有 invite_quiet_member 可以指定已有参与者为 target。必须通过工具完成感知、评估、提案、动作生成、模拟 dispatch 和效果记录，不要直接用普通文本回答。读取类工具可以在同一轮调用；所有带状态变化的工具必须按流程顺序调用。`;
+const preferencePrompt = `每次必须逐条检查 preference_sources 中待审的已完成原话，reviewed_source_ids 必须列出全部已审来源 ID（即使没有意愿），并在对应决策的 preference_updates 返回明确的成员意愿（没有则 []，不可省略）：decline_invitation=本人明确不愿被点名；resume_invitation=本人明确重新允许邀请，普通发言不算撤销；quiet_period=明确请求整组暂停提问以安静思考，并提供原话中的 duration_seconds；end_quiet_period=本人明确结束自己请求的安静期。每项 source_id 必须来自工具，quote 必须逐字引用原话且非空；意愿归属原话 speaker，不可替别人设定或解除。不要将引用他人的话、假设、否定句或普通沉默误认为请求。不明确时不编造更新，并写入 missing_evidence。超过30分钟或没有明确时长的安静请求暂不自动设定期限，报告缺少证据。autonomy_state 是跨窗口保留的程序约束：拒绝只禁止对该成员的点名，允许合适的全组问题；安静期内不提问，不因沉默升级；到期重新评估而非强制发言。低参与、模型分数和普通后续发言不能覆盖有效意愿。`;
+
+const sharedPrompt = `${preferencePrompt}\n你是 MooTu 具身讨论促进 Agent。你只引用工具返回的可观察证据，不推断心理、生理、性格或身份。可用策略仅限：${STRATEGIES.join("、")}。每组候选必须包含 observe；只有 invite_quiet_member 可以指定已有参与者为 target。必须通过工具完成感知、评估、提案、动作生成、模拟 dispatch 和效果记录，不要直接用普通文本回答。读取类工具可以在同一轮调用；所有带状态变化的工具必须按流程顺序调用。`;
 
 export async function runPiBatchAgent({ observations, participants, memory = [], config, apiKey, baseUrl, model, streamFn, modelDefinition }) {
   const toolkit = createBatchToolset({ observations, participants, memory, config, decisionSchema, analysisSchema });

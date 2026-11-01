@@ -58,7 +58,7 @@ test('causal model executes a complete tool chain per observation',async()=>{
   const provider=fauxProvider();const responses=[];
   const reads=['observe_discussion_window','get_participation_metrics','get_flow_metrics','get_diversity_metrics','read_recent_memory','check_intervention_cooldown'];
   const actions=['propose_intervention','generate_robot_action','dispatch_core_action','dispatch_pod_feedback','record_expected_effect'];
-  for(const time of [0,30,60,90,120,150,180]) for(const calls of [reads.map(t=>[t,{}]),[['evaluate_candidates',{summary:'当前窗口',events:[{time,stage_recommendation:'diverge',evidence:[],missing_evidence:[],candidates:[observe]}]}]],actions.map(t=>[t,{}])]) responses.push(fauxAssistantMessage(calls.map(([t,p],i)=>fauxToolCall(t,p,{id:`${time}-${responses.length}-${i}`})),{stopReason:'toolUse'}));
+  for(const time of [0,30,60,90,120,150,180]) for(const calls of [reads.map(t=>[t,{}]),[['evaluate_candidates',{summary:'当前窗口',events:[{time,stage_recommendation:'diverge',evidence:[],missing_evidence:[],preference_updates:[],reviewed_source_ids:lines.flatMap((line,i)=>line.end<=time&&line.end>time-30?[`evt-${i+1}`]:[]),candidates:[observe]}]}]],actions.map(t=>[t,{}])]) responses.push(fauxAssistantMessage(calls.map(([t,p],i)=>fauxToolCall(t,p,{id:`${time}-${responses.length}-${i}`})),{stopReason:'toolUse'}));
   provider.setResponses(responses);
   const result=await runAIAgent({...input,apiKey:'',streamFn:provider.provider.streamSimple,modelDefinition:provider.getModel()});
   assert.equal(result.architecture,'pi-causal');assert.equal(result.events.length,7);assert.ok(result.execution.every(e=>e.recorded));

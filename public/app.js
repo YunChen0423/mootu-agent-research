@@ -337,6 +337,8 @@ function splitRecognizedSentences(text) {
 function enterLiveSession() {
   document.body.classList.add("live-mode");
   document.body.dataset.stage = "diverge";
+  state.agentMemory = [];
+  state.liveRequestId += 1;
   state.liveLines = [];
   state.liveInterim = "";
   state.liveTranscript = "";
@@ -676,7 +678,7 @@ function renderDecision(event, eventIndex, time) {
   $("#podActions").textContent = `${pod.temperature} · ${pod.vibration} · ${pod.breathing}`;
   $("#podOrb").classList.toggle("active", Boolean(invitedTarget));
   $(".pod-section").classList.toggle("targeted", Boolean(invitedTarget));
-  $("#jsonOutput").textContent = JSON.stringify({ timestamp: formatPresentationTime(event.time), source_timestamp: formatTime(event.time), playback_speed: timelineSpeed(), runtime: { architecture: "session-harness+pi", event_log_count: state.sessionHarness.eventLog.length, tool_trace: state.agentTrace, execution: state.agentExecution }, blackboard: state.sessionHarness.blackboard, agent_views: { discussion: state.sessionHarness.getAgentView("discussion_facilitator"), synthesis: state.sessionHarness.getAgentView("candidate_synthesis") }, stage: event.stage, stage_control: { recommendation: event.stageRecommendation, consecutive_votes: event.stageVotes }, observation: { evidence: event.evidence, missing_evidence: gaps }, assessment: event.metrics, decision: { source: event.decisionSource, intervene: intervening, strategy: event.strategy, target: invitedTarget, reason: event.reason, confidence: event.confidence, expected_effect: event.expectedEffect, selection_margin: event.selectionMargin, candidate_evaluation: event.candidates }, memory: { previous_outcome: event.reflection, entries: eventIndex }, actions: { core: { ...renderedAction, display: information }, pod: invitedTarget ? { target: invitedTarget, ...pod } : pod }, follow_up: event.followUp }, null, 2);
+  $("#jsonOutput").textContent = JSON.stringify({ timestamp: formatPresentationTime(event.time), source_timestamp: formatTime(event.time), playback_speed: timelineSpeed(), runtime: { architecture: "session-harness+pi", event_log_count: state.sessionHarness.eventLog.length, tool_trace: state.agentTrace, execution: state.agentExecution }, blackboard: state.sessionHarness.blackboard, agent_views: { discussion: state.sessionHarness.getAgentView("discussion_facilitator"), synthesis: state.sessionHarness.getAgentView("candidate_synthesis") }, stage: event.stage, stage_control: { recommendation: event.stageRecommendation, consecutive_votes: event.stageVotes }, observation: { evidence: event.evidence, missing_evidence: gaps }, assessment: event.metrics, decision: { source: event.decisionSource, intervene: intervening, strategy: event.strategy, target: invitedTarget, reason: event.reason, confidence: event.confidence, expected_effect: event.expectedEffect, selection_margin: event.selectionMargin, candidate_evaluation: event.candidates }, memory: { previous_outcome: event.reflection, entries: eventIndex, autonomy_state: event.autonomyState, preference_audit: event.preferenceAudit, blocked_candidates: event.blockedCandidates }, actions: { core: { ...renderedAction, display: information }, pod: invitedTarget ? { target: invitedTarget, ...pod } : pod }, follow_up: event.followUp }, null, 2);
 }
 
 function renderStageCriteria(event, time) {
@@ -799,13 +801,13 @@ async function requestLiveAIDecision(signal, fallbackDecision) {
   }
   const requestId = ++state.liveRequestId;
   try {
-    const result = await fetch("/api/agent/decide", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ transcript: state.liveLines, participants: state.session.participants, stage: document.body.dataset.stage || "diverge", signal, memory: state.agentMemory }) }).then(async (response) => { if (!response.ok) throw new Error((await response.json()).error); return response.json(); });
+    const result = await fetch("/api/agent/decide", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ transcript: state.liveLines, participants: state.session.participants, stage: document.body.dataset.stage || "diverge", signal: { ...signal, sessionTime: Math.max(0, (performance.now() - state.liveStartedAt) / 1000) }, memory: state.agentMemory }) }).then(async (response) => { if (!response.ok) throw new Error((await response.json()).error); return response.json(); });
     if (requestId !== state.liveRequestId || !result.decision) return;
     const decision = result.decision;
     state.agentTrace = result.trace || [];
     state.agentExecution = result.execution || null;
     renderToolTrace();
-    state.agentMemory.push({ at: Date.now(), strategy: decision.strategy, expectedEffect: decision.expectedEffect, stageVotes: decision.stageVotes });
+    state.agentMemory.push({ at: Date.now(), strategy: decision.strategy, expectedEffect: decision.expectedEffect, stageVotes: decision.stageVotes, autonomyState: decision.autonomyState });
     state.agentMemory = state.agentMemory.slice(-8);
     document.body.dataset.stage = decision.stage;
     $("#decisionTitle").textContent = decision.title;

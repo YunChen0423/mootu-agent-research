@@ -30,6 +30,8 @@ node --env-file-if-exists=.env eval/run.mjs --model
 
 ## 入口
 
+后续修复与新复测见 [意愿状态与失败审计](eval/autonomy-v2/README.md)；[新结果](eval/autonomy-v2/RESULTS.md)与旧基线分开保存。
+
 **新增测试集和结果入口：[eval/RESULTS.md](eval/RESULTS.md)**。四组共 22 个用例，每个都有独立输入、预期和实际输出。运行 `npm run eval:all` 更新报告；语义挑战不符会返回非零，这是保留的能力缺口。
 
 
